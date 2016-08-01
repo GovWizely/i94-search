@@ -1,0 +1,10 @@
+.explorer__spinner {
+  .sk-circle {
+    height: 48px;
+    margin: 0 auto;
+
+    :before {
+      background-color: #999;
+    }
+  }
+}
