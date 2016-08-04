@@ -1,1 +1,1 @@
-export const fields = ['q', 'countries'];
+export const fields = ['q', 'countries', 'world_regions', 'date'];

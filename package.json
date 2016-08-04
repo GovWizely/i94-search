@@ -1,5 +1,5 @@
 {
-  "name": "csl-search",
+  "name": "i94-search",
   "version": "0.0.1",
   "description": "Consolidated Screening List Search App",
   "license": "MIT",
@@ -63,7 +63,9 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.13.1",
     "react": "^15.2.1",
+    "react-datepicker": "^0.28.2",
     "react-dom": "^15.2.1",
+    "react-month-picker": "^1.0.11",
     "react-redux": "^4.4.5",
     "react-router": "^2.5.1",
     "react-router-redux": "^4.0.5",

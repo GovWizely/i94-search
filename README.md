@@ -1,7 +1,7 @@
-CSL Search
+I94 Search
 =====================
 
-A search client for Consolidated Screening List.
+A search client for I94 arrivals data by month.  
 
 ### Setup
 

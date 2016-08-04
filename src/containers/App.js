@@ -24,6 +24,9 @@ class App extends Component {
   handleSubmit = (form) => {
     const params = reduce(omitBy(form, isEmpty), (result, value, _key) => {
       const key = snakeCase(_key);
+
+      console.log(key, value);
+
       return Object.assign(
         result, { [key]: Array.isArray(value) ? map(value, 'value').join(',') : value });
     }, {});

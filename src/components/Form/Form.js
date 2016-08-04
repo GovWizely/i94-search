@@ -1,7 +1,10 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import Select from 'react-select';
+import MonthPicker from './MonthPicker.js';
+
 import countryList from '../../fixtures/countries';
+import worldRegionsList from '../../fixtures/world_regions';
 import './Form.scss';
 
 const TextField = ({ description, field, label }) => (
@@ -40,7 +43,7 @@ SelectField.propTypes = {
 };
 
 const Form = ({
-  fields: { q, countries },
+  fields: { q, countries, worldRegions, date },
   handleSubmit,
 }) => (
   <form className="explorer__form" onSubmit={handleSubmit}>
@@ -53,6 +56,13 @@ const Form = ({
         field={countries} label="Countries" options={countryList} multi
         description="Choose which countries that you want to search."
       />
+      <SelectField
+        field={worldRegions} label="World Regions" options={worldRegionsList} multi
+        description="Choose which world regions you want to search."
+      />
+ 
+      <MonthPicker />
+
       <div className="explorer__form__group">
         <button className="explorer__form__submit pure-button pure-button-primary" onClick={handleSubmit}>
           <i className="fa fa-paper-plane" /> Search
@@ -67,5 +77,5 @@ Form.propTypes = {
 };
 export default reduxForm({
   form: 'form',
-  fields: ['q', 'countries'],
+  fields: ['q', 'countries', 'worldRegions', 'date'],
 })(Form);
