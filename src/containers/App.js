@@ -24,12 +24,10 @@ class App extends Component {
   handleSubmit = (form) => {
     const params = reduce(omitBy(form, isEmpty), (result, value, _key) => {
       const key = snakeCase(_key);
-
-      console.log(key, value);
-
       return Object.assign(
         result, { [key]: Array.isArray(value) ? map(value, 'value').join(',') : value });
     }, {});
+
     this.props.dispatch(fetchResultsIfNeeded(params));
     this.push(params);
   }
@@ -42,12 +40,15 @@ class App extends Component {
       query,
       (result, value, key) => Object.assign(result, { [camelCase(key)]: value }),
       {});
+            console.log('foooooo');
+            console.log(JSON.stringify(formValues));
     return (
       <div className="explorer">
         <h1 className="Header-1"><b>Search I94 International Arrivals Data</b></h1>
         <p className="DefaultParagraph-1">Search for I94 arrivals data.  Each entry shows the number of arrivals for a country or region for a given month. </p>
 
         <div className="explorer__content">
+
           <Form onSubmit={this.handleSubmit} initialValues={formValues} />
           <Spinner active={results.isFetching} />
           <Result results={results} onPaging={this.handlePaging} query={query} />

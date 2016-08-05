@@ -1,6 +1,9 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
 import MonthPicker from './MonthPicker.js';
 
 import countryList from '../../fixtures/countries';
@@ -42,6 +45,32 @@ SelectField.propTypes = {
   multi: PropTypes.bool,
 };
 
+var Example = React.createClass({
+  displayName: 'Example',
+
+  getInitialState: function() {
+    return {
+      startDate: null
+    };
+  },
+
+  handleChange: function(date) {
+    this.setState({
+      startDate: date
+    });
+  },
+
+  render: function() {
+    return <DatePicker
+        {...this.props.field}
+        id={this.props.field.name}
+        name={this.props.field.name}
+        className="explorer__form__input"
+        selected={this.state.startDate}
+        onChange={this.handleChange} />;
+  }
+});
+
 const Form = ({
   fields: { q, countries, worldRegions, date },
   handleSubmit,
@@ -61,7 +90,9 @@ const Form = ({
         description="Choose which world regions you want to search."
       />
  
-      <MonthPicker />
+      <div className="explorer__form__group">
+        <Example field={date}/>
+      </div>
 
       <div className="explorer__form__group">
         <button className="explorer__form__submit pure-button pure-button-primary" onClick={handleSubmit}>
