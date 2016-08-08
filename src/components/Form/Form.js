@@ -45,34 +45,42 @@ SelectField.propTypes = {
   multi: PropTypes.bool,
 };
 
-var Example = React.createClass({
-  displayName: 'Example',
+const DATE_FORMAT = 'YYYY-MM-DD';
+const DateField = ({ field, startDate, endDate }) => {
+  const selected = field.value ? moment(field.value) : null;
+  return (
+    <DatePicker
+      {...field}
+      dateFormat={DATE_FORMAT}
+      className="explorer__form__input"
+      selected={selected}
+    />
+  );
+};
+DateField.propTypes = {
+  endDate: PropTypes.object.isRequired,
+  field: PropTypes.object.isRequired,
+  startDate: PropTypes.object.isRequired,
+};
 
-  getInitialState: function() {
-    return {
-      startDate: null
-    };
-  },
+const DateRangeField = ({ description, label = 'Untitled', startDate, endDate }) => (
+  <div className="explorer__form__group">
+    <label>{label}</label>
+    {description ? <p>{description}</p> : null}
+    <DateField field={startDate} startDate={startDate} endDate={endDate} />
+    <DateField field={endDate} startDate={startDate} endDate={endDate} />
+  </div>
+);
+DateRangeField.propTypes = {
+  description: PropTypes.string,
+  endDate: PropTypes.object.isRequired,
+  label: PropTypes.string,
+  startDate: PropTypes.object.isRequired,
+};
 
-  handleChange: function(date) {
-    this.setState({
-      startDate: date
-    });
-  },
-
-  render: function() {
-    return <DatePicker
-        {...this.props.field}
-        id={this.props.field.name}
-        name={this.props.field.name}
-        className="explorer__form__input"
-        selected={this.state.startDate}
-        onChange={this.handleChange} />;
-  }
-});
 
 const Form = ({
-  fields: { q, countries, worldRegions, date },
+  fields: { q, countries, worldRegions, startDate, endDate },
   handleSubmit,
 }) => (
   <form className="explorer__form" onSubmit={handleSubmit}>
@@ -90,9 +98,12 @@ const Form = ({
         description="Choose which world regions you want to search."
       />
  
-      <div className="explorer__form__group">
-        <Example field={date}/>
-      </div>
+      <DateRangeField
+        startDate={startDate}
+        endDate={endDate}
+        label="Date"
+        description="Choose a date range"
+      />
 
       <div className="explorer__form__group">
         <button className="explorer__form__submit pure-button pure-button-primary" onClick={handleSubmit}>
@@ -108,5 +119,5 @@ Form.propTypes = {
 };
 export default reduxForm({
   form: 'form',
-  fields: ['q', 'countries', 'worldRegions', 'date'],
+  fields: ['q', 'countries', 'worldRegions', 'startDate', 'endDate'],
 })(Form);

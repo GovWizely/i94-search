@@ -20,12 +20,12 @@ class Item extends Component {
   }
 
   render() {
-    const { i94_country, i94_region } = this.props.result;
+    const { i94_country, i94_region, date } = this.props.result;
     const { expand } = this.state;
     const heading = i94_country ? i94_country : i94_region;
     return (
       <div className="explorer__result-item">
-        <a href="#" className="explorer__result-item__label" onClick={this.onClick}>{heading}</a>
+        <a href="#" className="explorer__result-item__label" onClick={this.onClick}>{heading} - {date}</a>
         {expand ? <Detail result={this.props.result} /> : null}
       </div>
     );

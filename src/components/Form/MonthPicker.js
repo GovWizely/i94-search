@@ -22,8 +22,8 @@ let MonthBox = React.createClass({
 
     render() {
       return (
-        <div className="box explorer__form__group" onClick={this._handleClick}>
-          <input type="text" className="explorer__form__input" id={this.props.field.name} name={this.props.field.name} value={this.state.value} />
+        <div onClick={this._handleClick}>
+          <input type="text" className="explorer__form__input" id={this.props.field.name} name={this.props.field.name} value={this.state.value} {...this.props.field}/>
         </div>
       )
     },

@@ -8,7 +8,7 @@ const Detail = ({ result }) => (
       <Row label="I94 Region">{result.i94_region}</Row>
       <Row label="Date">{result.date}</Row>
       <Row label="I94 Code">{result.i94_code.toString()}</Row>
-      <Row label="Amount">{result.amount.toString()}</Row>
+      <Row label="Amount">{result.amount.toLocaleString()}</Row>
       <Row label="Country">{result.country}</Row>
       <Row label="World Regions">
         <UnorderedList value={result.world_region} />

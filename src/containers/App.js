@@ -1,10 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { camelCase, isEmpty, map, omitBy, reduce, snakeCase } from '../utils/lodash';
+import { camelCase, isEmpty, map, omit, omitBy, reduce, snakeCase } from '../utils/lodash';
 import { stringify } from 'querystring';
 import { Form, Result, Spinner } from '../components';
 import { fetchResultsIfNeeded } from '../actions';
 import './App.scss';
+
+function processDateParams(params) {
+  if (params.start_date && params.end_date) {
+    var start_date = params.start_date.toISOString().slice(0,10)
+    var end_date = params.end_date.toISOString().slice(0,10)
+    Object.assign(params, { date: start_date + " TO " + end_date });
+  }
+  return omit(params, ['start_date', 'end_date']);
+}
 
 class App extends Component {
   componentDidMount() {
@@ -22,11 +31,12 @@ class App extends Component {
     this.push(params);
   }
   handleSubmit = (form) => {
-    const params = reduce(omitBy(form, isEmpty), (result, value, _key) => {
+    const params = processDateParams(reduce(omitBy(form, isEmpty), (result, value, _key) => {
       const key = snakeCase(_key);
       return Object.assign(
         result, { [key]: Array.isArray(value) ? map(value, 'value').join(',') : value });
-    }, {});
+    }, {}));
+
 
     this.props.dispatch(fetchResultsIfNeeded(params));
     this.push(params);
@@ -40,8 +50,6 @@ class App extends Component {
       query,
       (result, value, key) => Object.assign(result, { [camelCase(key)]: value }),
       {});
-            console.log('foooooo');
-            console.log(JSON.stringify(formValues));
     return (
       <div className="explorer">
         <h1 className="Header-1"><b>Search I94 International Arrivals Data</b></h1>
