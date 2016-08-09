@@ -1,1 +1,0 @@
-export { fetchResultsIfNeeded } from './results';
