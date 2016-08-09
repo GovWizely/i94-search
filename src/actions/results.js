@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'querystring';
+import { omit } from '../utils/lodash';
 import { REQUEST_RESULTS, RECEIVE_RESULTS, RECEIVE_FAILURE } from 'constants';
 import config from '../config.js';
 
@@ -44,7 +45,10 @@ function shouldFetchResults(state) {
 }
 
 function processParams(params) {
-  return stringify(params);
+  if (params.start_date && params.end_date) {
+    Object.assign(params, { date: params.start_date + " TO " + params.end_date });
+  }
+  return stringify(omit(params, ['start_date', 'end_date']));
 }
 
 export function fetchResultsIfNeeded(params) {

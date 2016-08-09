@@ -8,11 +8,13 @@ import './App.scss';
 
 function processDateParams(params) {
   if (params.start_date && params.end_date) {
-    var start_date = params.start_date.toISOString().slice(0,10)
-    var end_date = params.end_date.toISOString().slice(0,10)
-    Object.assign(params, { date: start_date + " TO " + end_date });
+
+    var start_date = typeof params.start_date == "object" ? params.start_date.toISOString().slice(0,10) : params.start_date;
+    var end_date = typeof params.end_date == "object" ? params.end_date.toISOString().slice(0,10) : params.end_date;
+
+    Object.assign(params, { start_date: start_date, end_date: end_date });
   }
-  return omit(params, ['start_date', 'end_date']);
+  return params;
 }
 
 class App extends Component {
@@ -36,7 +38,6 @@ class App extends Component {
       return Object.assign(
         result, { [key]: Array.isArray(value) ? map(value, 'value').join(',') : value });
     }, {}));
-
 
     this.props.dispatch(fetchResultsIfNeeded(params));
     this.push(params);

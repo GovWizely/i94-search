@@ -46,7 +46,7 @@ SelectField.propTypes = {
 };
 
 const DATE_FORMAT = 'YYYY-MM-DD';
-const DateField = ({ field, startDate, endDate }) => {
+const DateField = ({ field }) => {
   const selected = field.value ? moment(field.value) : null;
   return (
     <DatePicker
@@ -58,17 +58,15 @@ const DateField = ({ field, startDate, endDate }) => {
   );
 };
 DateField.propTypes = {
-  endDate: PropTypes.object.isRequired,
   field: PropTypes.object.isRequired,
-  startDate: PropTypes.object.isRequired,
 };
 
 const DateRangeField = ({ description, label = 'Untitled', startDate, endDate }) => (
   <div className="explorer__form__group">
     <label>{label}</label>
     {description ? <p>{description}</p> : null}
-    <DateField field={startDate} startDate={startDate} endDate={endDate} />
-    <DateField field={endDate} startDate={startDate} endDate={endDate} />
+    <DateField field={startDate} />
+    <DateField field={endDate} />
   </div>
 );
 DateRangeField.propTypes = {
