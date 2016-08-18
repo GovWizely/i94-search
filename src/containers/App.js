@@ -2,26 +2,18 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { camelCase, isEmpty, map, omit, omitBy, reduce, snakeCase } from '../utils/lodash';
 import { stringify } from 'querystring';
-import { Form, Result, Spinner } from '../components';
-import { fetchResultsIfNeeded } from '../actions';
+import { Form, Result, Spinner, AggregatedResult } from '../components';
+import { fetchResultsIfNeeded, fetchAggResultsIfNeeded, pageResults, setVisibleFields } from '../actions';
 import './App.scss';
-
-function processDateParams(params) {
-  if (params.start_date && params.end_date) {
-
-    var start_date = typeof params.start_date == "object" ? params.start_date.toISOString().slice(0,10) : params.start_date;
-    var end_date = typeof params.end_date == "object" ? params.end_date.toISOString().slice(0,10) : params.end_date;
-
-    Object.assign(params, { start_date: start_date, end_date: end_date });
-  }
-  return params;
-}
 
 class App extends Component {
   componentDidMount() {
     const { dispatch, query } = this.props;
-    dispatch(fetchResultsIfNeeded(query));
+    this.props.dispatch(setVisibleFields(query['visible_fields'] ? query['visible_fields'] : "total"));
+    //dispatch(fetchResultsIfNeeded(query));
+    dispatch(fetchAggResultsIfNeeded(query));
   }
+
   handlePaging = (e) => {
     e.preventDefault();
     if (!e.target.dataset.page) return;
@@ -32,35 +24,51 @@ class App extends Component {
     dispatch(fetchResultsIfNeeded(params));
     this.push(params);
   }
+
+  handleAggPaging = (e) => {
+    e.preventDefault();
+    if (!e.target.dataset.page) return;
+
+    const { dispatch } = this.props;
+    const offset = (parseInt(e.target.dataset.page, 10) - 1) * 10;
+    dispatch(pageResults(offset));
+  }
+
   handleSubmit = (form) => {
-    const params = processDateParams(reduce(omitBy(form, isEmpty), (result, value, _key) => {
+    const params = reduce(omitBy(form, isEmpty), (result, value, _key) => {
       const key = snakeCase(_key);
       return Object.assign(
         result, { [key]: Array.isArray(value) ? map(value, 'value').join(',') : value });
-    }, {}));
+    }, {});
 
-    this.props.dispatch(fetchResultsIfNeeded(params));
+    this.props.dispatch(setVisibleFields(params['visible_fields'] ? params['visible_fields'] : "total"));
+    //this.props.dispatch(fetchResultsIfNeeded(params));
+    this.props.dispatch(fetchAggResultsIfNeeded(params));
     this.push(params);
   }
+
   push(params) {
     this.props.history.push(`?${stringify(params)}`);
   }
+
   render() {
+
     const { query, results } = this.props;
     const formValues = reduce(
       query,
       (result, value, key) => Object.assign(result, { [camelCase(key)]: value }),
       {});
+
     return (
       <div className="explorer">
-        <h1 className="Header-1"><b>Search I94 International Arrivals Data</b></h1>
-        <p className="DefaultParagraph-1">Search for I94 arrivals data.  Each entry shows the number of arrivals for a country or region for a given month. </p>
+        <h1 className="Header-1"><b>National Travel and Tourism Office (NTTO) I-94 Arrivals Data</b></h1>
+        <p className="DefaultParagraph-1">Search for I-94 arrivals data and generate reports for each country or region in the results. </p>
 
         <div className="explorer__content">
 
           <Form onSubmit={this.handleSubmit} initialValues={formValues} />
-          <Spinner active={results.isFetching} />
-          <Result results={results} onPaging={this.handlePaging} query={query} />
+          <Spinner active={results.isFetchingAggs} />
+          <AggregatedResult results={results} onPaging={this.handleAggPaging} query={query} />
         </div>
       </div>
     );

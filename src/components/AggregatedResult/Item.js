@@ -21,11 +21,11 @@ class Item extends Component {
   }
 
   render() {
-    const { i94_country_or_region, date } = this.props.result;
+    const { i94_country_or_region } = this.props.result;
     const { expand } = this.state;
     return (
       <div className="explorer__result-item">
-        <a href="#" className="explorer__result-item__label" onClick={this.onClick}>{i94_country_or_region}  -  {date}</a>
+        <a href="#" className="explorer__result-item__label" onClick={this.onClick}>{i94_country_or_region}</a>
         {expand ? <Detail result={this.props.result} visibleFields={this.props.visibleFields} /> : null}
       </div>
     );

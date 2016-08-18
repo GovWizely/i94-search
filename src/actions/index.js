@@ -1,1 +1,2 @@
-export { fetchResultsIfNeeded } from './results';
+export { fetchResultsIfNeeded, fetchAggResultsIfNeeded, pageResults, setVisibleFields } from './results';
+

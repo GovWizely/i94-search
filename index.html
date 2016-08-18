@@ -2,11 +2,17 @@
 <html>
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <title>Export.gov/I94 Search</title>
-    <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js"></script>
+    <title>Export.gov/NTTO I94 Search</title>
+
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="public/MonthPicker.min.js"></script>
     <script>
       $(document).ready(function() {
         Explorer.render('explorer-app');
+        $('input[type=month]').MonthPicker({ StartYear: 2016, ShowIcon: false });
       });
     </script>
   </head>

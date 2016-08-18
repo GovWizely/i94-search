@@ -1,0 +1,20 @@
+export default [
+  { label: 'Overseas', value: 'Overseas' },
+  { label: 'Western Europe', value: 'Western Europe' },
+  { label: 'Eastern Europe', value: 'Eastern Europe' },
+  { label: 'Asia', value: 'Asia' },
+  { label: 'Middle East', value: 'Middle East' },
+  { label: 'Africa', value: 'Africa' },
+  { label: 'Oceania', value: 'Oceania' },
+  { label: 'South America', value: 'South America' },
+  { label: 'Central America', value: 'Central America' },
+  { label: 'Caribbean', value: 'Caribbean' },
+  { label: 'Visa Waiver', value: 'Visa Waiver' },
+  { label: 'Non-Visa Waiver', value: 'Non-Visa Waiver' },
+  { label: 'APEC (Asia Pacific Economic Cooperation)', value: 'APEC' },
+  { label: 'EU (European Union)', value: 'EU' },
+  { label: 'OECD (Organization for Economic Cooperation and Development)', value: 'OECD' },
+  { label: 'PATA (Pacific Asia Travel Association)', value: 'PATA' },
+  { label: 'International', value: 'International' },
+];
+

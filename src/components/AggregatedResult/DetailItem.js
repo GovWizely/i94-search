@@ -1,5 +1,6 @@
 import { compact, get, isEmpty, map } from '../../utils/lodash';
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 
 const isValidArray = (value) => (value && Array.isArray(value) && value.length);
 const isValidChildren = (value) => {
@@ -40,9 +41,25 @@ const Row = ({ label, children }) => {
 };
 Row.propTypes = { label: PropTypes.string.isRequired, children: PropTypes.any };
 
+const MonthlyAmountsList = ({ value }) => {
+
+  const items = compact(map(value, (v, k) => {
+    return(
+    <li key={k}>
+      {moment(k).format('MMM YYYY')}  -  {v.toLocaleString()}
+    </li>
+    );
+  }));
+  if (isEmpty(items)) return null;
+
+  return <ul className="explorer__result-monthly_amounts">{items}</ul>;
+};
+MonthlyAmountsList.propTypes = { value: PropTypes.object };
+
 export {
   Link,
   ListItem,
   Row,
-  UnorderedList
+  UnorderedList,
+  MonthlyAmountsList
 };
