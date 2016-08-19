@@ -4,9 +4,17 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <title>Export.gov/I94 Search</title>
     <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js"></script>
+    <link href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="bower_components/jquery-ui-month-picker/demo/MonthPicker.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="http://code.jquery.com/jquery-1.12.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="bower_components/jquery.maskedinput/dist/jquery.maskedinput.min.js"></script>
+    <script src="bower_components/jquery-ui-month-picker/demo/MonthPicker.min.js"></script>
     <script>
       $(document).ready(function() {
         Explorer.render('explorer-app');
+        $('input[type=month]').MonthPicker({ StartYear: 2016, ShowIcon: false });
       });
     </script>
   <link href="explorer.css" rel="stylesheet"></head>
