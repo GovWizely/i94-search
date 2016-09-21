@@ -13,7 +13,7 @@ const ResultCountLabel = ({ count, query }) => {
     else if (count >= 10000) text = 'Too many results, enter more terms to narrow search.';
     else text = `${count} reports found.`;
   }
-  return <p className="explorer__result__label">{text}</p>;
+  return <p className="result-count-label">{text}</p>;
 };
 ResultCountLabel.propTypes = {
   count: PropTypes.number.isRequired,

@@ -34,7 +34,7 @@ const Row = ({ label, children }) => {
 
   return (
     <tr>
-      <td>{label}</td>
+      <td className="result-row-label">{label}</td>
       <td>{children}</td>
     </tr>
   );
