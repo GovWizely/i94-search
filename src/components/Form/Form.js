@@ -99,7 +99,7 @@ const Form = ({
       />
 
       <SelectField
-        field={sort} label="Sort Results" options={sortList} multi
+        field={sort} label="Sort Reports" options={sortList}
         description="Choose a parameter by which to sort reports.  The sort parameters will be applied in the order they are entered here."
       />
 

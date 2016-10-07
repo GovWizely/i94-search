@@ -45,10 +45,9 @@ export function results(state = {
     return Object.assign({}, state, {
       isFetchingAggs: false,
       invalidated: false,
-      aggregatedItems: action.payload.results,
+      aggregatedItems: action.payload,
       offset: 0,
-      pageItems: action.payload.results.slice(state.offset, state.offset+10),
-      total: action.payload.total,
+      pageItems: action.payload.slice(state.offset, state.offset+10),
     });
   case SET_VISIBLE_FIELDS:
     return Object.assign({}, state, {

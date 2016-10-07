@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'querystring';
 import { isEmpty, omit, values } from '../utils/lodash';
-import { transformResults } from './transform_results.js';
+import { buildAggResults } from './build_agg_results.js';
+import { buildReports } from './build_reports.js';
 import { REQUEST_RESULTS, REQUEST_AGG_RESULTS, RECEIVE_RESULTS, RECEIVE_FAILURE, PAGE_RESULTS, RECEIVE_AGG_RESULTS, SET_VISIBLE_FIELDS } from 'constants';
 import config from '../config.js';
 
@@ -52,26 +53,29 @@ export function setVisibleFields(visible_fields){
   };
 }
 
-function aggregateResults(json, querystring, params, offset, aggregated_results) {
-  if(Object.prototype.hasOwnProperty.call(aggregated_results, 'results')){
-    aggregated_results.results = aggregated_results.results.concat(json.results);
-  }
-  else{
-    Object.assign(aggregated_results, json);
-  }
+function aggregateResults(json, querystring, params, offset, agg_results) {
   // 10k is the max offset that can be reached in Elasticsearch:
-  if(aggregated_results.total >= 10000){
-    aggregated_results.results = [];
+  if(json.total >= 10000){
+    aggregated_results.results = {};
     return receiveResults(aggregated_results);
   }
-  // Fetch next batch of results if needed:
-  if(aggregated_results.results.length < aggregated_results.total){
-    return fetchAggResults(querystring, params, offset+100, aggregated_results);
+  
+  if(Object.prototype.hasOwnProperty.call(agg_results, 'results')){
+    agg_results.results = buildAggResults(json.results, agg_results.results, params);
+    agg_results.raw_total += json.results.length;
+  }
+  else{
+    agg_results.results = buildAggResults(json.results, {}, params);
+    agg_results.raw_total = json.results.length;
   }
 
-  aggregated_results.results = transformResults(aggregated_results.results, params);
-  
-  return receiveAggResults(aggregated_results);
+  // Fetch next batch of results if needed:
+  if(agg_results.raw_total < json.total){
+    return fetchAggResults(querystring, params, offset+100, agg_results);
+  }
+
+  agg_results.results = buildReports(agg_results.results, params);
+  return receiveAggResults(agg_results.results);
 }
 
 const { host, apiKey } = config.api.i94;
@@ -107,7 +111,7 @@ function buildQueryString(params) {
   if (params.start_date && params.end_date) {
     Object.assign(params, { date: params.start_date + "-01" + " TO " + params.end_date + "-01" });
   }
-  return stringify(omit(params, ['start_date', 'end_date', 'percent_change', 'visible_fields']));
+  return stringify(omit(params, ['start_date', 'end_date', 'percent_change', 'visible_fields', 'sort']));
 }
 
 export function fetchResultsIfNeeded(params) {

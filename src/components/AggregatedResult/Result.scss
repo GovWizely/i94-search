@@ -7,8 +7,23 @@
 }
 
 .explorer__result-monthly_amounts {
-  height: 150px;
+  max-height: 150px;
   overflow-y: scroll;
+}
+
+.explorer__result-ports_amounts {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.explorer__result-ports_list {
+  max-height: 300px;
+  overflow-y: scroll;
+  display: block;
+}
+
+.ports-cell {
+  border: none !important;
 }
 
 .explorer__result-item {
