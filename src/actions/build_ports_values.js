@@ -17,7 +17,6 @@ export function buildPortsValues(ports_arrivals, visible_fields, total_arrivals_
     var ports_array = ports_arrivals[date_key];
 
     ports_array.forEach( function (entry) {
-      console.log(JSON.stringify({label: entry.port, value: snakeCase(entry.port)}))
       if (has(ports_arrivals_sums, entry.port) && has(ports_values_arrays, entry.port)) {
         ports_arrivals_sums[entry.port].amount += entry.amount;
         ports_values_arrays[entry.port].amount.push(entry.amount);
@@ -38,14 +37,15 @@ export function buildPortsValues(ports_arrivals, visible_fields, total_arrivals_
   });
 
   return_hash.ports_arrivals_sums = values(ports_arrivals_sums).sort(compare);
-  if (total_arrivals_sum != "")  return_hash.ports_arrivals_percent_of_total = calculatePercentofTotal(ports_arrivals_sums);
+  if (total_arrivals_sum != "")  return_hash.ports_arrivals_percent_of_total = calculatePercentofTotal(ports_arrivals_sums, total_arrivals_sum);
   return_hash.ports_arrivals_percent_changes = values(ports_values_arrays);
 
   return return_hash;
 }
 
-function calculatePercentofTotal(ports_arrivals_sums){
+function calculatePercentofTotal(ports_arrivals_sums, total_arrivals_sum){
   var ports_arrivals_percent_of_total = [];
+  
   values(ports_arrivals_sums).forEach( function (entry) {
     ports_arrivals_percent_of_total.push({ port: entry.port, amount: ((entry.amount / total_arrivals_sum) * 100).toFixed(2).toString() + "%"})
   });

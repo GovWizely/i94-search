@@ -55,10 +55,7 @@ export function setVisibleFields(visible_fields){
 
 function aggregateResults(json, querystring, params, offset, agg_results) {
   // 10k is the max offset that can be reached in Elasticsearch:
-  if(json.total >= 10000){
-    aggregated_results.results = {};
-    return receiveResults(aggregated_results);
-  }
+  if(json.total >= 10000) return receiveAggResults([]);
   
   if(Object.prototype.hasOwnProperty.call(agg_results, 'results')){
     agg_results.results = buildAggResults(json.results, agg_results.results, params);
@@ -75,6 +72,7 @@ function aggregateResults(json, querystring, params, offset, agg_results) {
   }
 
   agg_results.results = buildReports(agg_results.results, params);
+
   return receiveAggResults(agg_results.results);
 }
 
@@ -129,7 +127,7 @@ export function fetchAggResultsIfNeeded(params) {
     params.sort = params.sort ? params.sort : ""
     params.percent_change = params.percent_change ? params.percent_change : ""
     if (isEmpty(omit(params, ['sort', 'offset', 'size', 'percent_change', 'visible_fields']))) {
-      return dispatch(receiveAggResults({total: 0, results: []}));
+      return dispatch(receiveAggResults([]));
     }
     else {
       return dispatch(fetchAggResults(buildQueryString(params), params, 0, {}));

@@ -2,8 +2,6 @@ import React, { PropTypes } from 'react';
 import { Row, UnorderedList, MonthlyAmountsList, PortsList, PortsAmounts, PortsPercentages } from './DetailItem';
 
 const Detail = ({ result, visibleFields }) => {
-  //console.log(JSON.stringify(result, null, 2))
-
   return (
     <table className="explorer__result-item__detail">
       <tbody>
