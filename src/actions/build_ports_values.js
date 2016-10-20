@@ -19,27 +19,29 @@ export function buildPortsValues(ports_arrivals, visible_fields, total_arrivals_
     ports_array.forEach( function (entry) {
       if (has(ports_arrivals_sums, entry.port) && has(ports_values_arrays, entry.port)) {
         ports_arrivals_sums[entry.port].amount += entry.amount;
-        ports_values_arrays[entry.port].amount.push(entry.amount);
+        ports_values_arrays[entry.port].amount[date_key] = entry.amount;
       }
       else{
         ports_arrivals_sums[entry.port] = {};
         ports_arrivals_sums[entry.port].port = entry.port;
         ports_arrivals_sums[entry.port].amount = entry.amount;
         ports_values_arrays[entry.port] = {};
-        ports_values_arrays[entry.port].amount = [entry.amount];
+        ports_values_arrays[entry.port].amount = {};
+        ports_values_arrays[entry.port].amount[date_key] = entry.amount;
         ports_values_arrays[entry.port].port = entry.port;
       }
     });
   }
 
-  values(ports_values_arrays).forEach( function (entry) {
+  for(var k in ports_values_arrays) {
+    var entry = ports_values_arrays[k];
     entry.amount = calculatePercentageChange(entry.amount, percent_change);
-  });
+  }
 
   return_hash.ports_arrivals_sums = values(ports_arrivals_sums).sort(compare);
   if (total_arrivals_sum != "")  return_hash.ports_arrivals_percent_of_total = calculatePercentofTotal(ports_arrivals_sums, total_arrivals_sum);
   return_hash.ports_arrivals_percent_changes = values(ports_values_arrays);
-
+x
   return return_hash;
 }
 
@@ -53,8 +55,10 @@ function calculatePercentofTotal(ports_arrivals_sums, total_arrivals_sum){
   return ports_arrivals_percent_of_total;
 }
 
-function calculatePercentageChange(values_array, percent_change){
-  values_array = compact(values_array);
+function calculatePercentageChange(values_hash, percent_change){
+  var values_array = values(values_hash);
+  var values_dates = Object.keys(values_hash);
+
   if ( values_array.length == 0 ) {
     return "No values."
   }
@@ -62,18 +66,27 @@ function calculatePercentageChange(values_array, percent_change){
   if (percent_change == 'quarterly'){
     var start = values_array.slice(0, 3).reduce((a, b) => a + b, 0);
     var end = values_array.slice(values_array.length-3, values_array.length).reduce((a, b) => a + b, 0);
+    var start_date_range = values_dates[0] + ' to ' + values_dates[2];
+    var end_date_range = values_dates[values_array.length-3] + ' to ' + values_dates[values_array.length-1];
   }
   else if (percent_change == 'annual'){
     var start = values_array.slice(0, 12).reduce((a, b) => a + b, 0);
     var end = values_array.slice(values_array.length-12, values_array.length).reduce((a, b) => a + b, 0);
+    var start_date_range = values_dates[0] + ' to ' + values_dates[11];
+    var end_date_range = values_dates[values_array.length-12] + ' to ' + values_dates[values_array.length-1];
   }
   else {
     percent_change = 'monthly'
     var start = values_array[0];
     var end = values_array[values_array.length - 1];
+    var start_date_range = values_dates[0];
+    var end_date_range = values_dates[values_array.length-1];
   }
 
-  return ((end - start)/start * 100).toFixed(2).toString() + "%";
+  return [capitalize(percent_change),
+        start_date_range + ":  " + start.toLocaleString(), 
+        end_date_range + ":  " + end.toLocaleString(), 
+        ((end - start)/start * 100).toFixed(2).toString() + "%"];
 }
 
 function compare(a,b) {

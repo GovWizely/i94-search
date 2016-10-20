@@ -102,7 +102,22 @@ const PortsPercentages = ({value}) => {
 
   return <ul className="explorer__result-ports_amounts">{items}</ul>;
 };
-PortsAmounts.propTypes = { value: PropTypes.array };
+PortsPercentages.propTypes = { value: PropTypes.array };
+
+const PortsPercentChange = ({value}) => {
+  const items = compact(map(value, (item, i) => {
+    return(
+    <tr key={item.port}>
+      <td className="ports-cell">{item.port}</td>
+      <td className="ports-cell"> <UnorderedList value={item.amount} /> </td>
+    </tr>
+    );
+  }));
+  if (isEmpty(items)) return null;
+
+  return <table className="explorer__result-ports_list"><tbody>{items}</tbody></table>;
+};
+PortsPercentChange.propTypes = { value: PropTypes.array };
 
 export {
   Link,
@@ -112,5 +127,6 @@ export {
   MonthlyAmountsList,
   PortsList,
   PortsAmounts,
-  PortsPercentages
+  PortsPercentages,
+  PortsPercentChange
 };

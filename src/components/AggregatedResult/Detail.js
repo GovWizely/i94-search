@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Row, UnorderedList, MonthlyAmountsList, PortsList, PortsAmounts, PortsPercentages } from './DetailItem';
+import { Row, UnorderedList, MonthlyAmountsList, PortsList, PortsAmounts, PortsPercentages, PortsPercentChange } from './DetailItem';
 
 const Detail = ({ result, visibleFields }) => {
   return (
@@ -58,7 +58,7 @@ const Detail = ({ result, visibleFields }) => {
         </Row>
 
         <Row label="Percent Change for Ports of Entry Arrivals for Time Frame">
-          <PortsPercentages value={result.ports_arrivals_percent_changes} />
+          <PortsPercentChange value={result.ports_arrivals_percent_changes} />
         </Row>
 
         <Row label="Arrivals by Ports of Entry">
