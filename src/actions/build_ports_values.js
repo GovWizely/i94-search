@@ -41,7 +41,7 @@ export function buildPortsValues(ports_arrivals, visible_fields, total_arrivals_
   return_hash.ports_arrivals_sums = values(ports_arrivals_sums).sort(compare);
   if (total_arrivals_sum != "")  return_hash.ports_arrivals_percent_of_total = calculatePercentofTotal(ports_arrivals_sums, total_arrivals_sum);
   return_hash.ports_arrivals_percent_changes = values(ports_values_arrays);
-x
+
   return return_hash;
 }
 
