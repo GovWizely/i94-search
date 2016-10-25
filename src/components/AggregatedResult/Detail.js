@@ -14,54 +14,54 @@ const Detail = ({ result, visibleFields }) => {
           <UnorderedList value={result.world_region} />
         </Row>
 
-        <Row label="Sum of Total Arrivals for Time Frame">{result.total_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Total Arrivals for Time Frame">
+        <Row label="Sum of Monthly Total Arrivals for Time Frame">{result.total_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Total Monthly Arrivals">
           <UnorderedList value={result.total_arrivals_percent_change} />
         </Row>
-        <Row label="Total Arrivals">
+        <Row label="Total Arrivals by Month">
           <MonthlyAmountsList value={result.total_arrivals} />
         </Row>
 
-        <Row label="Sum of Business Visa Arrivals for Time Frame">{result.business_visa_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Business Arrivals for Time Frame">
+        <Row label="Sum of Monthly Business Visa Arrivals for Time Frame">{result.business_visa_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Monthly Business Visa Arrivals">
           <UnorderedList value={result.business_visa_arrivals_percent_change} />
         </Row>
-        <Row label="Sum of Business Visa Arrivals Percentage of Total Sum">{result.business_visa_arrivals_percent_of_total.toLocaleString()}</Row>
-        <Row label="Business Visa Arrivals">
+        <Row label="Business Visa Arrivals Percentage of Total Arrivals for Time Frame">{result.business_visa_arrivals_percent_of_total.toLocaleString()}</Row>
+        <Row label="Business Visa Arrivals by Month">
           <MonthlyAmountsList value={result.business_visa_arrivals} />
         </Row>
 
-        <Row label="Sum of Pleasure Visa Arrivals for Time Frame">{result.pleasure_visa_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Pleasure Arrivals for Time Frame">
+        <Row label="Sum of Monthly Pleasure Visa Arrivals for Time Frame">{result.pleasure_visa_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Monthly Pleasure Arrivals">
           <UnorderedList value={result.pleasure_visa_arrivals_percent_change} />
         </Row>
-        <Row label="Sum of Pleasure Visa Arrivals Percentage of Total Sum">{result.pleasure_visa_arrivals_percent_of_total.toLocaleString()}</Row>
-        <Row label="Pleasure Visa Arrivals">
+        <Row label="Pleasure Visa Arrivals Percentage of Total Arrivals for Time Frame">{result.pleasure_visa_arrivals_percent_of_total.toLocaleString()}</Row>
+        <Row label="Pleasure Visa Arrivals by Month">
           <MonthlyAmountsList value={result.pleasure_visa_arrivals} />
         </Row>
 
-        <Row label="Sum of Student Visa Arrivals for Time Frame">{result.student_visa_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Student Arrivals for Time Frame">
+        <Row label="Sum of Monthly Student Visa Arrivals for Time Frame">{result.student_visa_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Monthly Student Arrivals">
           <UnorderedList value={result.student_visa_arrivals_percent_change} />
         </Row>
-        <Row label="Sum of Student Visa Arrivals Percentage of Total Sum">{result.student_visa_arrivals_percent_of_total.toLocaleString()}</Row>
-        <Row label="Student Visa Arrivals">
+        <Row label="Student Visa Arrivals Percentage of Total Arrivals for Time Frame">{result.student_visa_arrivals_percent_of_total.toLocaleString()}</Row>
+        <Row label="Student Visa Arrivals by Month">
           <MonthlyAmountsList value={result.student_visa_arrivals} />
         </Row>
 
-        <Row label="Sum of Ports of Entry Arrivals for Time Frame">
+        <Row label="Sum of Monthly Ports of Entry Arrivals for Time Frame">
           <PortsAmounts value={result.ports_arrivals_sums} />
         </Row>
 
-        <Row label="Sum of Ports of Entry Arrivals Percentage of Total Sum">
+        <Row label="Ports of Entry Arrivals Percentage of Total Arrivals for Time Frame">
           <PortsPercentages value={result.ports_arrivals_percent_of_total} />
         </Row>
 
-        <Row label="Percent Change for Ports of Entry Arrivals for Time Frame">
+        <Row label="Percent Change for Monthly Ports of Entry Arrivals">
           <PortsPercentChange value={result.ports_arrivals_percent_changes} />
         </Row>
 
-        <Row label="Arrivals by Ports of Entry">
+        <Row label="Ports of Entry Arrivals by Month">
           <PortsList value={result.ports_arrivals} />
         </Row>
 

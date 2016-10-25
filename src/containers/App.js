@@ -2,27 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { camelCase, isEmpty, map, omit, omitBy, reduce, snakeCase } from '../utils/lodash';
 import { stringify } from 'querystring';
-import { Form, Result, Spinner, AggregatedResult } from '../components';
-import { fetchResultsIfNeeded, fetchAggResultsIfNeeded, pageResults, setVisibleFields } from '../actions';
+import { Form, Spinner, AggregatedResult } from '../components';
+import { fetchAggResultsIfNeeded, pageResults, setVisibleFields } from '../actions';
 import './App.scss';
 
 class App extends Component {
   componentDidMount() {
     const { dispatch, query } = this.props;
-    this.props.dispatch(setVisibleFields(query['visible_fields'] ? query['visible_fields'] : "total"));
-    //dispatch(fetchResultsIfNeeded(query));
+    dispatch(setVisibleFields(query['visible_fields'] ? query['visible_fields'] : "total"));
     dispatch(fetchAggResultsIfNeeded(query));
-  }
-
-  handlePaging = (e) => {
-    e.preventDefault();
-    if (!e.target.dataset.page) return;
-
-    const { dispatch, query } = this.props;
-    const offset = (parseInt(e.target.dataset.page, 10) - 1) * 10;
-    const params = Object.assign({}, omitBy(query, isEmpty), { offset });
-    dispatch(fetchResultsIfNeeded(params));
-    this.push(params);
   }
 
   handleAggPaging = (e) => {
@@ -42,7 +30,6 @@ class App extends Component {
     }, {});
 
     this.props.dispatch(setVisibleFields(params['visible_fields'] ? params['visible_fields'] : "total"));
-    //this.props.dispatch(fetchResultsIfNeeded(params));
     this.props.dispatch(fetchAggResultsIfNeeded(params));
     this.push(params);
   }
