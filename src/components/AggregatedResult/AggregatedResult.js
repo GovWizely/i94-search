@@ -9,10 +9,10 @@ const ResultCountLabel = ({ count, query }) => {
   let text = '';
   if (!isEmpty(omit(query, ['offset', 'sort', 'percent_change']))) {
     if (count === 0) text = 'No results.';
-    else if (count === 1) text = `${count} report found.`;
-    else text = `${count} reports found.`;
+    else if (count === 1) text = ` report found.`;
+    else text = ` reports found.`;
   }
-  return <p className="result-count-label">{text}</p>;
+  return <p className="result-count-label"><div className="result-count">{count}</div>{text}</p>;
 };
 ResultCountLabel.propTypes = {
   count: PropTypes.number.isRequired,
