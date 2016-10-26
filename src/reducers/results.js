@@ -7,18 +7,19 @@ export function results(state = {
   pageItems: [],
   offset: 0,
   invalidated: false,
-  total: 0,
   visibleFields: [],
+  error: ""
 }, action) {
   switch (action.type) {
   case REQUEST_AGG_RESULTS:
     return Object.assign({}, state, {
+      error: "",
       isFetchingAggs: true,
       invalidated: false,
     });
   case RECEIVE_FAILURE:
     return Object.assign({}, state, {
-      isFetching: false,
+      isFetchingAggs: false,
       invalidated: false,
       error: action.error,
     });
@@ -31,9 +32,9 @@ export function results(state = {
     return Object.assign({}, state, {
       isFetchingAggs: false,
       invalidated: false,
-      aggregatedItems: action.payload,
+      aggregatedItems: action.payload.results,
       offset: 0,
-      pageItems: action.payload.slice(state.offset, state.offset+10),
+      pageItems: action.payload.results.slice(state.offset, state.offset+10),
     });
   case SET_VISIBLE_FIELDS:
     return Object.assign({}, state, {

@@ -42,17 +42,18 @@ export function setVisibleFields(visible_fields){
 
 function aggregateResults(json, querystring, params, offset, agg_results) {
   // 10k is the max offset that can be reached in Elasticsearch for now:
-  if(json.total >= 10000) return receiveAggResults([]);
+  //if(json.total >= 10000) return receiveAggResults({results: []});
+  if(json.total >= 10000) return receiveFailure('Too many results, enter more search terms to narrow search.');
   
   agg_results.results = buildAggResults(json.results, agg_results.results, params);
-  agg_results.raw_total += json.results.length;
+  agg_results.total += json.results.length;
   // Fetch next batch of results if needed:
-  if(agg_results.raw_total < json.total)
+  if(agg_results.total < json.total)
     return fetchAggResults(querystring, params, offset+100, agg_results);
   
   agg_results.results = buildReports(agg_results.results, params);
 
-  return receiveAggResults(agg_results.results);
+  return receiveAggResults(agg_results);
 }
 
 const { host, apiKey } = config.api.i94;
@@ -97,10 +98,10 @@ export function fetchAggResultsIfNeeded(params) {
     params.sort = params.sort ? params.sort : ""
     params.percent_change = params.percent_change ? params.percent_change : ""
     if (isEmpty(omit(params, ['sort', 'offset', 'size', 'percent_change', 'visible_fields']))) {
-      return dispatch(receiveAggResults([])); // Don't return anything if no query is entered
+      return dispatch(receiveAggResults({results: []})); // Don't return anything if no query is entered
     }
-    else if(shouldFetchResults(getState())){
-      var agg_results = {results: {}, raw_total: 0}
+    if(shouldFetchResults(getState())){
+      var agg_results = {results: []}
       return dispatch(fetchAggResults(buildQueryString(params), params, 0, agg_results));
     }
 

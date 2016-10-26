@@ -16,8 +16,8 @@ export function buildReports(agg_results, params){
 
     entry = populateAdditionalFields(arrivals_keys, entry, percent_change);
     entry = populatePercentOfTotalFields(visible_fields, entry);
-
-    if(visible_fields.includes('ports')) // Add ports fields
+    
+    if(visible_fields.includes('ports') && has(entry, 'ports_arrivals')) // Add ports fields
       agg_results[key] = Object.assign(entry, buildPortsValues(entry.ports_arrivals, visible_fields, entry.total_arrivals_sum, percent_change));
   }
   agg_results = performSort(sort_param, values(agg_results));
@@ -46,13 +46,13 @@ function populateAdditionalFields(arrivals_keys, entry, percent_change){
 }
 
 function populatePercentOfTotalFields(visible_fields, entry){
-  if (visible_fields.includes('total') && visible_fields.includes('business_visa')) {
+  if (visible_fields.includes('total') && visible_fields.includes('business_visa') && entry.business_visa_arrivals_sum != "") {
     entry.business_visa_arrivals_percent_of_total = ((entry.business_visa_arrivals_sum / entry.total_arrivals_sum) * 100).toFixed(2).toString() + "%";
   }
-  if (visible_fields.includes('total') && visible_fields.includes('pleasure_visa')) {
+  if (visible_fields.includes('total') && visible_fields.includes('pleasure_visa') && entry.pleasure_visa_arrivals_sum != "") {
     entry.pleasure_visa_arrivals_percent_of_total = ((entry.pleasure_visa_arrivals_sum / entry.total_arrivals_sum) * 100).toFixed(2).toString() + "%";
   }
-  if (visible_fields.includes('total') && visible_fields.includes('student_visa')) {
+  if (visible_fields.includes('total') && visible_fields.includes('student_visa') && entry.student_visa_arrivals_sum != "") {
     entry.student_visa_arrivals_percent_of_total = ((entry.student_visa_arrivals_sum / entry.total_arrivals_sum) * 100).toFixed(2).toString() + "%";
   }
   return entry;

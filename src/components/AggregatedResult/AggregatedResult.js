@@ -10,7 +10,6 @@ const ResultCountLabel = ({ count, query }) => {
   if (!isEmpty(omit(query, ['offset', 'sort', 'percent_change']))) {
     if (count === 0) text = 'No results.';
     else if (count === 1) text = `${count} report found.`;
-    else if (count >= 10000) text = 'Too many results, enter more terms to narrow search.';
     else text = `${count} reports found.`;
   }
   return <p className="result-count-label">{text}</p>;
@@ -39,6 +38,8 @@ TimeFrameLabel.propTypes = {
 
 const AggregatedResult = ({ onPaging, query = {}, results }) => {
   if (results.isFetchingAggs) return null;
+  if (results.error != "") 
+    return (<div className="explorer__result">{results.error}</div>);
 
   const items = map(results.pageItems, result => {
     const key = result.i94_country_or_region;
