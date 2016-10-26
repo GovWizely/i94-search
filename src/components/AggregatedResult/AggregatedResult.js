@@ -12,6 +12,8 @@ const ResultCountLabel = ({ count, query }) => {
     else if (count === 1) text = ` report found.`;
     else text = ` reports found.`;
   }
+  if (text == '') count = '';
+  
   return <p className="result-count-label"><div className="result-count">{count}</div>{text}</p>;
 };
 ResultCountLabel.propTypes = {
