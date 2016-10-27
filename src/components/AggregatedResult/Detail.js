@@ -14,7 +14,7 @@ const Detail = ({ result, visibleFields }) => {
           <UnorderedList value={result.world_region} />
         </Row>
 
-        <Row label="Sum of Monthly Total Arrivals for Time Frame">{result.total_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Total Arrivals">{result.total_arrivals_sum.toLocaleString()}</Row>
         <Row label="Percent Change for Total Monthly Arrivals">
           <UnorderedList value={result.total_arrivals_percent_change} />
         </Row>
@@ -22,42 +22,42 @@ const Detail = ({ result, visibleFields }) => {
           <MonthlyAmountsList value={result.total_arrivals} />
         </Row>
 
-        <Row label="Sum of Monthly Business Visa Arrivals for Time Frame">{result.business_visa_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Monthly Business Visa Arrivals">
+        <Row label="Business Visa Arrivals">{result.business_visa_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Business Visa Arrivals">
           <UnorderedList value={result.business_visa_arrivals_percent_change} />
         </Row>
-        <Row label="Business Visa Arrivals Percentage of Total Arrivals for Time Frame">{result.business_visa_arrivals_percent_of_total.toLocaleString()}</Row>
+        <Row label="Business Visa Arrivals Percentage of Total Arrivals">{result.business_visa_arrivals_percent_of_total.toLocaleString()}</Row>
         <Row label="Business Visa Arrivals by Month">
           <MonthlyAmountsList value={result.business_visa_arrivals} />
         </Row>
 
-        <Row label="Sum of Monthly Pleasure Visa Arrivals for Time Frame">{result.pleasure_visa_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Monthly Pleasure Arrivals">
+        <Row label="Pleasure Visa Arrivals">{result.pleasure_visa_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Pleasure Visa Arrivals">
           <UnorderedList value={result.pleasure_visa_arrivals_percent_change} />
         </Row>
-        <Row label="Pleasure Visa Arrivals Percentage of Total Arrivals for Time Frame">{result.pleasure_visa_arrivals_percent_of_total.toLocaleString()}</Row>
+        <Row label="Pleasure Visa Arrivals Percentage of Total Arrivals">{result.pleasure_visa_arrivals_percent_of_total.toLocaleString()}</Row>
         <Row label="Pleasure Visa Arrivals by Month">
           <MonthlyAmountsList value={result.pleasure_visa_arrivals} />
         </Row>
 
-        <Row label="Sum of Monthly Student Visa Arrivals for Time Frame">{result.student_visa_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Monthly Student Arrivals">
+        <Row label="Student Visa Arrivals">{result.student_visa_arrivals_sum.toLocaleString()}</Row>
+        <Row label="Percent Change for Student Visa Arrivals">
           <UnorderedList value={result.student_visa_arrivals_percent_change} />
         </Row>
-        <Row label="Student Visa Arrivals Percentage of Total Arrivals for Time Frame">{result.student_visa_arrivals_percent_of_total.toLocaleString()}</Row>
+        <Row label="Student Visa Arrivals Percentage of Total Arrivals">{result.student_visa_arrivals_percent_of_total.toLocaleString()}</Row>
         <Row label="Student Visa Arrivals by Month">
           <MonthlyAmountsList value={result.student_visa_arrivals} />
         </Row>
 
-        <Row label="Sum of Monthly Ports of Entry Arrivals for Time Frame">
+        <Row label="Ports of Entry Arrivals">
           <PortsAmounts value={result.ports_arrivals_sums} />
         </Row>
 
-        <Row label="Ports of Entry Arrivals Percentage of Total Arrivals for Time Frame">
+        <Row label="Ports of Entry Arrivals Percentage of Total Arrivals">
           <PortsPercentages value={result.ports_arrivals_percent_of_total} />
         </Row>
 
-        <Row label="Percent Change for Monthly Ports of Entry Arrivals">
+        <Row label="Percent Change for Ports of Entry Arrivals">
           <PortsPercentChange value={result.ports_arrivals_percent_changes} />
         </Row>
 
