@@ -7,3 +7,6 @@ export omit from 'lodash/omit';
 export omitBy from 'lodash/omitBy';
 export reduce from 'lodash/reduce';
 export snakeCase from 'lodash/snakeCase';
+export values from 'lodash/values';
+export capitalize from 'lodash/capitalize';
+export has from 'lodash/has';
