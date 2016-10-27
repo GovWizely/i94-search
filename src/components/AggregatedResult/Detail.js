@@ -15,7 +15,7 @@ const Detail = ({ result, visibleFields }) => {
         </Row>
 
         <Row label="Total Arrivals">{result.total_arrivals_sum.toLocaleString()}</Row>
-        <Row label="Percent Change for Total Monthly Arrivals">
+        <Row label="Percent Change for Total Arrivals">
           <UnorderedList value={result.total_arrivals_percent_change} />
         </Row>
         <Row label="Total Arrivals by Month">
