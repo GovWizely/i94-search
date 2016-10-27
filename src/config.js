@@ -12,8 +12,8 @@ const config = Object.assign({
   production: {
     api: {
       i94: {
-        host: 'https://api.govwizely.com/v1/i94_monthly_data/search',
-        apiKey: 'Z48wSr3E3nNN4itDUvE4Clje',
+        host: 'https://api.trade.gov/v1/i94_monthly_data/search',
+        apiKey: 'O6fmOIPtrvDlqoDe2_6UbKJc',
       },
     },
   },
