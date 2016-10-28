@@ -28,7 +28,7 @@ const TimeFrameLabel = ({ query }) => {
   }
   else
     var time_frame = "no time frame specified";
-  let text = 'Enter a search term in one of the form fields and click "Generate Reports".';
+  let text = '';
   if (!isEmpty(omit(query, ['offset', 'sort', 'percent_change']))) {
     text = `I-94 Arrivals for:  ${time_frame}.`;
   }
