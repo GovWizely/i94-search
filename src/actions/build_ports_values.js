@@ -1,13 +1,12 @@
 import { values, has, compact, capitalize, map, snakeCase } from '../utils/lodash';
-import { calculatePercentageChange } from './shared_functions.js';
+import { calculatePercentageChange, filterValuesForInterval } from './shared_functions.js';
 
-export function buildPortsValues(ports_arrivals, visible_fields, total_arrivals_sum, percent_change){
+export function buildPortsValues(ports_arrivals, percent_change){
   ports_arrivals = sortPortsArrivals(ports_arrivals);
-  
-  var return_hash = populateAdditionalFields(ports_arrivals, percent_change);
+  ports_arrivals = filterValuesForInterval(ports_arrivals, percent_change);
 
-  if (total_arrivals_sum != "")  
-    return_hash.ports_arrivals_percent_of_total = calculatePercentofTotal(return_hash.ports_arrivals_sums, total_arrivals_sum);
+  var return_hash = populateAdditionalFields(ports_arrivals, percent_change);
+  return_hash.ports_arrivals = ports_arrivals;
 
   return return_hash;
 }
@@ -17,7 +16,12 @@ function sortPortsArrivals(ports_arrivals){
     var ports_array = ports_arrivals[date_key];
     ports_array.sort(compare);
   }
-  return ports_arrivals
+
+  var ordered = {};
+  Object.keys(ports_arrivals).sort().forEach(function(k) {
+        ordered[k] = ports_arrivals[k];
+      });
+  return ordered;
 }
 
 function populateAdditionalFields(ports_arrivals, percent_change){
@@ -42,7 +46,6 @@ function populateAdditionalFields(ports_arrivals, percent_change){
   }
   ports_values_by_date = populatePercentageChange(ports_values_by_date, percent_change);
 
-  return_hash.ports_arrivals_sums = values(ports_arrivals_sums).sort(compare);
   return_hash.ports_arrivals_percent_changes = values(ports_values_by_date);
   return return_hash;
 }
@@ -54,16 +57,6 @@ function populatePercentageChange(ports_values_by_date, percent_change){
   }
 
   return ports_values_by_date;
-}
-
-function calculatePercentofTotal(ports_arrivals_sums, total_arrivals_sum){
-  var ports_arrivals_percent_of_total = [];
-  
-  values(ports_arrivals_sums).forEach( function (entry) {
-    ports_arrivals_percent_of_total.push({ port: entry.port, amount: ((entry.amount / total_arrivals_sum) * 100).toFixed(2).toString() + "%"})
-  });
-
-  return ports_arrivals_percent_of_total;
 }
 
 function compare(a,b) {

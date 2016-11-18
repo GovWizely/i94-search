@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import { camelCase, isEmpty, map, omit, omitBy, reduce, snakeCase } from '../utils/lodash';
 import { stringify } from 'querystring';
 import { Form, Spinner, AggregatedResult } from '../components';
-import { fetchAggResultsIfNeeded, pageResults, setVisibleFields } from '../actions';
+import { fetchAggResultsIfNeeded, pageResults } from '../actions';
 import './App.scss';
 
 class App extends Component {
   componentDidMount() {
     const { dispatch, query } = this.props;
-    dispatch(setVisibleFields(query['visible_fields'] ? query['visible_fields'] : "total"));
     dispatch(fetchAggResultsIfNeeded(query));
   }
 
@@ -28,8 +27,6 @@ class App extends Component {
       return Object.assign(
         result, { [key]: Array.isArray(value) ? map(value, 'value').join(',') : value });
     }, {});
-
-    this.props.dispatch(setVisibleFields(params['visible_fields'] ? params['visible_fields'] : "total"));
     this.props.dispatch(fetchAggResultsIfNeeded(params));
     this.push(params);
   }

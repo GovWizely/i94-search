@@ -4,12 +4,10 @@ import Detail from './Detail';
 class Item extends Component {
   static propTypes = {
     result: PropTypes.object.isRequired,
-    visibleFields: PropTypes.array.isRequired
   }
 
   constructor(props) {
     super(props);
-
     this.onClick = this.onClick.bind(this);
   }
 
@@ -26,7 +24,7 @@ class Item extends Component {
     return (
       <div className="explorer__result-item">
         <a href="#" className="explorer__result-item__label" onClick={this.onClick}>{i94_country_or_region}</a>
-        {expand ? <Detail result={this.props.result} visibleFields={this.props.visibleFields} /> : null}
+        {expand ? <Detail result={this.props.result} /> : null}
       </div>
     );
   }

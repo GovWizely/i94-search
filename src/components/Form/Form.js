@@ -1,29 +1,39 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { RadioGroup, Radio } from 'react-radio-group';
 import { reduxForm } from 'redux-form';
+import { change } from 'redux-form';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import FormMessages from 'redux-form-validation';
+import { generateValidation } from 'redux-form-validation';
 
 import countryList from '../../fixtures/countries';
 import worldRegionsList from '../../fixtures/world_regions';
-import sortList from '../../fixtures/sort';
 import nttoGroupsList from '../../fixtures/ntto_groups';
 import percentChangeList from '../../fixtures/percent_change';
-import visibleFieldsList from '../../fixtures/visible_fields';
 import './Form.scss';
 
-const TextField = ({ description, field, label }) => (
-  <div className="explorer__form__group">
-    <label htmlFor={field.name}>{label}</label>
-    {description ? <p>{description}</p> : null}
-    <input type="text" className="explorer__form__input" id={field.name} {...field} />
-  </div>
-);
-TextField.propTypes = {
-  description: PropTypes.string,
-  field: PropTypes.object.isRequired,
-  label: PropTypes.string,
-};
+ var validations = {
+     startDate: {
+       required: true
+     },
+     percentChange: {
+       required: true
+     },
+     selectOptions: {
+      required: false
+     },
+    countries: {
+      required: false
+     },
+    worldRegions: {
+      required: false
+     },
+    nttoGroups: {
+      required: false
+     }
+   };
 
 const SelectField = ({ description, field, label = 'Untitled', options, multi = false }) => (
   <div className="explorer__form__group">
@@ -35,6 +45,9 @@ const SelectField = ({ description, field, label = 'Untitled', options, multi = 
         options={options}
         multi={multi} autoBlur
         onBlur={() => field.onBlur(field.value)}
+        joinValues = {true}
+        delimiter = {','}
+        simpleValue = {true}
       />
     </div>
   </div>
@@ -56,81 +69,139 @@ DateField.propTypes = {
   field: PropTypes.object.isRequired,
 }
 
-const DateRangeField = ({ description, label = 'Untitled', startDate, endDate }) => (
-  <div className="explorer__form__group">
-    <label>{label}</label>
-    {description ? <p>{description}</p> : null}
-    <DateField field={startDate} />
-    <DateField field={endDate} />
-  </div>
-);
-DateRangeField.propTypes = {
-  description: PropTypes.string,
-  endDate: PropTypes.object.isRequired,
-  label: PropTypes.string,
-  startDate: PropTypes.object.isRequired,
-};
+const CountriesField = ({field}) => (
+  <SelectField
+    field={field} label="All Countries" options={countryList} multi
+    description="Choose one or more countries to search."
+  />
+)
 
+const WorldRegionsField = ({field}) => (
+  <SelectField
+    field={field} label="ITA World Regions" options={worldRegionsList} multi
+    description="Choose one or more world regions to search."
+  />
+)
 
-const Form = ({
-  fields: { q, countries, worldRegions, startDate, endDate, sort, nttoGroups, percentChange, visibleFields },
-  handleSubmit,
-}) => (
-  <form className="explorer__form" onSubmit={handleSubmit}>
-    <fieldset>
-      <TextField
-        field={q} label="Keyword"
-        description="Search against the i94_country_or_region field."
-      />
-      <SelectField
-        field={countries} label="All Countries (Overseas, Canada, Mexico)" options={countryList} multi
-        description="Choose which countries that you want to search."
-      />
-      <SelectField
-        field={worldRegions} label="ITA World Regions" options={worldRegionsList} multi
-        description="Choose which world regions you want to search."
-      />
+const NttoGroupsField = ({field}) => (
+  <SelectField
+    field={field} label="NTTO Groups" options={nttoGroupsList} multi
+    description="Choose one or more NTTO groups to search."
+  />
+)
 
-      <DateRangeField
-        startDate={startDate}
-        endDate={endDate}
-        label="Date"
-        description="Choose a range of months to filter arrivals data."
-      />
+class Form extends Component {
+  static propTypes = {
+    fields: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.func.isRequired
+  }
 
-      <SelectField
-        field={sort} label="Sort Reports" options={sortList}
-        description="Choose a parameter by which to sort reports.  The sort parameters will be applied in the order they are entered here."
-      />
+  constructor(props) {
+    super(props);
+    this.state = {selectField: 'countries'};
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-      <SelectField
-        field={nttoGroups} label="NTTO Groups" options={nttoGroupsList} multi
-        description="Choose which NTTO groups you want to search."
-      />
+  handleChange(value) {
+    this.setState({selectField: value});
+  }
 
-      <SelectField
-        field={percentChange} label="Percent Change" options={percentChangeList} multi
-        description="Choose how to calculate percent changes in the reports.  Based on the given time range, this compares the first month vs. last month (Monthly), first 3 months vs. last 3 months (Quarterly), or first 12 months vs. last 12 months (Annual)."
-      />
+  render() {
+    const { 
+      fields: { selectOptions, countries, worldRegions, startDate, nttoGroups, percentChange }, 
+      handleSubmit 
+    } = this.props;
 
-      <SelectField
-        field={visibleFields} label="Visible Fields" options={visibleFieldsList} multi
-        description="Choose which arrivals values you want to appear in the reports.  Only shows Total Arrivals by default."
-      />
+    var selectField;
+    if (selectOptions.value == 'countries' || selectOptions.value === ''){
+      validations.countries = {required: true}
+      validations.worldRegions = {required: false}
+      validations.nttoGroups = {required: false}
+      selectField = <CountriesField field={countries} />;
+    }
+    else if (selectOptions.value == 'worldRegions'){
+      validations.countries = {required: false}
+      validations.worldRegions = {required: true}
+      validations.nttoGroups = {required: false}
+      selectField =  <WorldRegionsField field={worldRegions}/>;
+    }
+    else if (selectOptions.value == 'nttoGroups'){
+      validations.countries = {required: false}
+      validations.worldRegions = {required: false}
+      validations.nttoGroups = {required: true}
+      selectField = <NttoGroupsField field={nttoGroups}/>;
+    }
 
-      <div className="explorer__form__group">
-        <button className="explorer__form__submit pure-button pure-button-primary" onClick={handleSubmit}>
-          <i className="fa fa-paper-plane" /> Generate Reports
-        </button>
-      </div>
-    </fieldset>
-  </form>
-);
-Form.propTypes = {
-  fields: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-};
+    return (
+      <form className="explorer__form" onSubmit={handleSubmit}>
+        <fieldset>
+          <div className="explorer__form__group">
+            <label>Select an option to search by Countries, World Regions, or NTTO Groups</label>
+            <RadioGroup name='selectOptions' selectedValue={selectOptions.value ? selectOptions.value : 'countries'}>
+              <Radio {...selectOptions} value="countries" /> Countries
+              <Radio {...selectOptions} value="worldRegions" /> World Regions
+              <Radio {...selectOptions} value="nttoGroups" /> NTTO Groups
+            </RadioGroup>
+          </div>
+
+          {selectField}
+    
+          <FormMessages field={countries} >
+               <p className="validation-error" when="required">
+                 Must enter at least one country.
+               </p>
+          </FormMessages>
+          <FormMessages field={worldRegions} >
+               <p className="validation-error" when="required">
+                 Must enter at least one world region.
+               </p>
+          </FormMessages>
+          <FormMessages field={nttoGroups} >
+               <p className="validation-error" when="required">
+                 Must enter at least one NTTO group.
+               </p>
+          </FormMessages>
+
+          <div className="explorer__form__row">
+            <div className="explorer__form__row_group">
+              <div className="explorer__form__group">
+                <label>Choose Starting Month</label>
+                <DateField field={startDate} />
+              </div>
+            </div>
+          </div>
+
+          <FormMessages field={startDate} >
+               <p className="validation-error" when="required">
+                 Must enter a starting month.
+               </p>
+          </FormMessages>
+
+          <SelectField
+            field={percentChange} label="Report Interval" options={percentChangeList}
+            description="Choose a comparison interval.  This compares the chosen interval containing the starting month against the corresponding interval in the next year."
+          />
+
+          <FormMessages field={percentChange} >
+               <p className="validation-error" when="required">
+                 Must enter a report interval.
+               </p>
+          </FormMessages>
+
+          <div className="explorer__form__group">
+            <button className="explorer__form__submit pure-button pure-button-primary" onClick={handleSubmit}>
+              <i className="fa fa-paper-plane" /> Generate Reports
+            </button>
+
+          </div>
+        </fieldset>
+      </form>
+    );
+  }
+}
+
 export default reduxForm({
   form: 'form',
-  fields: ['q', 'countries', 'worldRegions', 'startDate', 'endDate', 'sort', 'nttoGroups', 'percentChange', 'visibleFields'],
+  fields: ['selectOptions', 'countries', 'worldRegions', 'startDate', 'nttoGroups', 'percentChange'],
+  ...generateValidation(validations)
 })(Form);

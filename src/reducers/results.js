@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import { RECEIVE_FAILURE, PAGE_RESULTS, RECEIVE_AGG_RESULTS, REQUEST_AGG_RESULTS, SET_VISIBLE_FIELDS } from 'constants';
+import { RECEIVE_FAILURE, PAGE_RESULTS, RECEIVE_AGG_RESULTS, REQUEST_AGG_RESULTS } from 'constants';
 
 export function results(state = {
   isFetchingAggs: false,
@@ -7,7 +7,6 @@ export function results(state = {
   pageItems: [],
   offset: 0,
   invalidated: false,
-  visibleFields: [],
   error: ""
 }, action) {
   switch (action.type) {
@@ -35,10 +34,6 @@ export function results(state = {
       aggregatedItems: action.payload.results,
       offset: 0,
       pageItems: action.payload.results.slice(state.offset, state.offset+10),
-    });
-  case SET_VISIBLE_FIELDS:
-    return Object.assign({}, state, {
-      visibleFields: action.visible_fields.split(',')
     });
   default:
     return state;
