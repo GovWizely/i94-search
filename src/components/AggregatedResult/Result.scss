@@ -1,3 +1,13 @@
+.line-graph {
+  display: inline !important;
+  height: auto !important;
+  font-size: 9px;
+}
+
+.download-button {
+  margin-left: 15px;
+}
+
 .explorer__result {
   font-size: 11px;
 
@@ -13,11 +23,6 @@
 .explorer__result-monthly_amounts {
   max-height: 150px;
   overflow-y: scroll;
-}
-
-.explorer__result-ports_amounts {
-    max-height: 300px;
-    overflow-y: scroll;
 }
 
 .explorer__result-ports_list {

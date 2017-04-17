@@ -10,3 +10,5 @@ export snakeCase from 'lodash/snakeCase';
 export values from 'lodash/values';
 export capitalize from 'lodash/capitalize';
 export has from 'lodash/has';
+export zipObject from 'lodash/zipObject';
+export pickBy from 'lodash/pickBy';

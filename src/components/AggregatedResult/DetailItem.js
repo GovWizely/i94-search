@@ -8,7 +8,7 @@ const isValidChildren = (value) => {
 
   if (typeof value.type === 'function' &&
       typeof get(value, ['props', 'value']) === 'undefined') return false;
-
+  
   return true;
 };
 
@@ -40,7 +40,6 @@ const Row = ({ label, children }) => {
 };
 Row.propTypes = { label: PropTypes.string.isRequired, children: PropTypes.any };
 
-
 const MonthlyAmountsList = ({ value }) => {
   if (typeof value != 'object') return null;
 
@@ -59,7 +58,6 @@ const MonthlyAmountsList = ({ value }) => {
 };
 MonthlyAmountsList.propTypes = { value: PropTypes.object };
 
-
 const PortsList = ({value}) => {
   const items = compact(map(value, (v, k) => {
     return(
@@ -75,7 +73,6 @@ const PortsList = ({value}) => {
 };
 PortsList.propTypes = { value: PropTypes.object };
 
-
 const PortsAmounts = ({value}) => {
   const items = compact(map(value, (item, i) => {
     return(
@@ -90,21 +87,9 @@ const PortsAmounts = ({value}) => {
 };
 PortsAmounts.propTypes = { value: PropTypes.array };
 
-const PortsPercentages = ({value}) => {
-  const items = compact(map(value, (item, i) => {
-    return(
-    <li key={i}>
-      {item['port']}:  {item['amount']}
-    </li>
-    );
-  }));
-  if (isEmpty(items)) return null;
-
-  return <ul className="explorer__result-ports_amounts">{items}</ul>;
-};
-PortsPercentages.propTypes = { value: PropTypes.array };
 
 const PortsPercentChange = ({value}) => {
+  
   const items = compact(map(value, (item, i) => {
     return(
     <tr key={item.port}>
@@ -127,6 +112,5 @@ export {
   MonthlyAmountsList,
   PortsList,
   PortsAmounts,
-  PortsPercentages,
   PortsPercentChange
 };

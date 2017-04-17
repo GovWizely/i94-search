@@ -1,6 +1,10 @@
 @import "./Select.scss";
 @import "./month-picker/MonthPicker.min.css";
 
+.validation-error {
+  color: red;
+}
+
 .explorer__form {
   font-size: 11px;
   margin: 28px 0;
@@ -14,6 +18,16 @@
 
   &__submit {
     float: right;
+  }
+
+  &__row {
+    display: inline;
+  }
+
+  &__row_group {
+    vertical-align:middle;
+    display: inline-block;
+    width: 50%;
   }
 
   &__group {
@@ -42,6 +56,7 @@
     box-sizing: border-box;
     display: inline-block;
     width: 100%;
+    height: 28px;
 
     &[type=text] {
       box-shadow: inset 0 1px 3px #ddd;
