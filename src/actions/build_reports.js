@@ -4,14 +4,14 @@ import { calculatePercentageChange, filterValuesForInterval } from './shared_fun
 import { performSort } from './sort_reports.js';
 
 export function buildReports(agg_results, params){
-  var percent_change = params.percent_change;
+  const percent_change = params.percent_change;
 
-  for (var key in agg_results) {
-    var entry = agg_results[key];
-    var visible_fields = "total,business_visa,student_visa,pleasure_visa,ports";
-    var arrivals_keys = map(visible_fields.split(','), type => { return type + "_arrivals"; });
+  for (let key in agg_results) {
+    const entry = agg_results[key];
+    const visible_fields = "total,business_visa,student_visa,pleasure_visa,ports";
+    const arrivals_keys = map(visible_fields.split(','), type => { return type + "_arrivals"; });
 
-    entry = populateAdditionalFields(arrivals_keys, entry, percent_change);
+    populateAdditionalFields(arrivals_keys, entry, percent_change);
     
     if( has(entry, 'ports_arrivals')) // Add ports fields
       agg_results[key] = Object.assign(entry, buildPortsValues(entry.ports_arrivals, percent_change));
@@ -22,12 +22,12 @@ export function buildReports(agg_results, params){
 }
 
 function populateAdditionalFields(arrivals_keys, entry, percent_change){
-  for (var i in arrivals_keys) {
-    var arrivals_type = arrivals_keys[i];
+  for (let i in arrivals_keys) {
+    const arrivals_type = arrivals_keys[i];
     if (arrivals_type == "ports_arrivals") continue; // Ports fields need custom treatment
-    var ordered = {};
-    var sum = 0;
-    // Sort amounts and add sum and percent change:
+    const ordered = {};
+
+    // Sort amounts and add percent change:
     if (has(entry, arrivals_type)){
       Object.keys(entry[arrivals_type]).sort().forEach(function(k) {
         ordered[k] = entry[arrivals_type][k];
@@ -36,5 +36,4 @@ function populateAdditionalFields(arrivals_keys, entry, percent_change){
       entry[arrivals_type + "_percent_change"] = calculatePercentageChange(entry[arrivals_type], percent_change);
     }
   }
-  return entry;
 }

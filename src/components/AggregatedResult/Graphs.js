@@ -277,14 +277,14 @@ const PortsChartPair = ({ data }) => {
     }
   }
 
-  var chart_one_datasets = [];
-  var chart_one_keys;
-  var color_index = 0;
+  const chart_one_datasets = [];
+  let chart_one_keys;
+  let color_index = 0;
 
   for (let k in first_data) {
-    var entry = first_data[k];
+    let entry = first_data[k];
     chart_one_keys = chart_one_keys ? chart_one_keys : Object.keys(entry);
-    var dataset = {
+    let dataset = {
       label: k,
       fill: false,
       backgroundColor: 'rgba(' + GraphColors[color_index] + ',0.4)',
@@ -301,14 +301,14 @@ const PortsChartPair = ({ data }) => {
     if (color_index >= 10) break;
   }
 
-  var chart_two_datasets = [];
-  var chart_two_keys;
+  const chart_two_datasets = [];
+  let chart_two_keys;
   color_index = 0;
 
   for (let k in first_data) { // We want 2nd datasets to have the same keys
-    var entry = second_data[k];
+    let entry = second_data[k];
     chart_two_keys = chart_two_keys ? chart_two_keys : Object.keys(entry);
-    var dataset = {
+    let dataset = {
       label: k,
       fill: false,
       backgroundColor: 'rgba(' + GraphColors[color_index] + ',0.4)',

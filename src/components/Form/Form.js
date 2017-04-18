@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { RadioGroup, Radio } from 'react-radio-group';
-import { reduxForm } from 'redux-form';
-import { change } from 'redux-form';
+import { reduxForm, change } from 'redux-form';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -14,7 +13,7 @@ import nttoGroupsList from '../../fixtures/ntto_groups';
 import percentChangeList from '../../fixtures/percent_change';
 import './Form.scss';
 
- var validations = {
+ const validations = {
      startDate: {
        required: true
      },
@@ -112,7 +111,7 @@ class Form extends Component {
       handleSubmit 
     } = this.props;
 
-    var selectField;
+    let selectField;
     if (selectOptions.value == 'countries' || selectOptions.value === ''){
       validations.countries = {required: true}
       validations.worldRegions = {required: false}
