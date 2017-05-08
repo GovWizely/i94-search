@@ -15,7 +15,7 @@ export function performSort(sort_param, transformed_results){
   return transformed_results;
 }
 
-function propComparator(prop, order) {
+export function propComparator(prop, order) {
   if (order === 'asc') {
     return function(a, b) {
       if (a[prop] < b[prop])

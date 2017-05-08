@@ -70,16 +70,6 @@ function shouldFetchResults(state) {
   return true;
 }
 
-export function fetchResultsIfNeeded(params) {
-  return (dispatch, getState) => {
-    if (shouldFetchResults(getState())) {
-      return dispatch(fetchResults(buildQueryString(params)));
-    }
-
-    return Promise.resolve([]);
-  };
-}
-
 export function fetchAggResultsIfNeeded(params) {
   return (dispatch, getState) => {
     params.percent_change = params.percent_change ? params.percent_change : ""

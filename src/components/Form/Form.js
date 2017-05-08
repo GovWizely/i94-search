@@ -6,12 +6,8 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import FormMessages from 'redux-form-validation';
 import { generateValidation } from 'redux-form-validation';
-
-import countryList from '../../fixtures/countries';
-import worldRegionsList from '../../fixtures/world_regions';
-import nttoGroupsList from '../../fixtures/ntto_groups';
-import percentChangeList from '../../fixtures/percent_change';
 import './Form.scss';
+import percentChangeList from '../../fixtures/percent_change';
 
  const validations = {
      startDate: {
@@ -68,23 +64,23 @@ DateField.propTypes = {
   field: PropTypes.object.isRequired,
 }
 
-const CountriesField = ({field}) => (
+const CountriesField = ({field, options}) => (
   <SelectField
-    field={field} label="All Countries" options={countryList} multi
+    field={field} label="All Countries" options={options} multi
     description="Choose one or more countries to search."
   />
 )
 
-const WorldRegionsField = ({field}) => (
+const WorldRegionsField = ({field, options}) => (
   <SelectField
-    field={field} label="ITA World Regions" options={worldRegionsList} multi
+    field={field} label="ITA World Regions" options={options} multi
     description="Choose one or more world regions to search."
   />
 )
 
-const NttoGroupsField = ({field}) => (
+const NttoGroupsField = ({field, options}) => (
   <SelectField
-    field={field} label="NTTO Groups" options={nttoGroupsList} multi
+    field={field} label="NTTO Groups" options={options} multi
     description="Choose one or more NTTO groups to search."
   />
 )
@@ -92,7 +88,8 @@ const NttoGroupsField = ({field}) => (
 class Form extends Component {
   static propTypes = {
     fields: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    formOptions: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -108,7 +105,8 @@ class Form extends Component {
   render() {
     const { 
       fields: { selectOptions, countries, worldRegions, startDate, nttoGroups, percentChange }, 
-      handleSubmit 
+      handleSubmit,
+      formOptions 
     } = this.props;
 
     let selectField;
@@ -116,19 +114,19 @@ class Form extends Component {
       validations.countries = {required: true}
       validations.worldRegions = {required: false}
       validations.nttoGroups = {required: false}
-      selectField = <CountriesField field={countries} />;
+      selectField = <CountriesField field={countries} options={formOptions.countries}/>;
     }
     else if (selectOptions.value == 'worldRegions'){
       validations.countries = {required: false}
       validations.worldRegions = {required: true}
       validations.nttoGroups = {required: false}
-      selectField =  <WorldRegionsField field={worldRegions}/>;
+      selectField =  <WorldRegionsField field={worldRegions} options={formOptions.worldRegions}/>;
     }
     else if (selectOptions.value == 'nttoGroups'){
       validations.countries = {required: false}
       validations.worldRegions = {required: false}
       validations.nttoGroups = {required: true}
-      selectField = <NttoGroupsField field={nttoGroups}/>;
+      selectField = <NttoGroupsField field={nttoGroups} options={formOptions.nttoGroups}/>;
     }
 
     return (
