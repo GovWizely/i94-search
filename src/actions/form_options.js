@@ -30,7 +30,10 @@ export function requestFormOptions(){
   return (dispatch) => {
     return fetch(`${host}?api_key=${apiKey}&size=1`)
         .then(response => response.json())
-        .then(json => dispatch(setFormOptions(json)));
+        .then(json => dispatch(setFormOptions(json)))
+        .catch((error) => {
+          dispatch(receiveFailure('There was an error connecting to the data source.'));
+        });;
   };
 }
 

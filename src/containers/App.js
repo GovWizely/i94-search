@@ -41,7 +41,6 @@ class App extends Component {
   }
 
   render() {
-
     const { query, results, form_options } = this.props;
     const formValues = reduce(
       query,

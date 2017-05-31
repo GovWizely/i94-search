@@ -56,7 +56,10 @@ function fetchAggResults(querystring, params, offset = 0, aggregated_results = {
     dispatch(requestAggResults(querystring));
     return fetch(`${host}?api_key=${apiKey}&size=100&offset=${offset}&${querystring}`)
       .then(response => response.json())
-      .then(json => dispatch(aggregateResults(json, querystring, params, offset, aggregated_results)));
+      .then(json => dispatch(aggregateResults(json, querystring, params, offset, aggregated_results)))
+      .catch((error) => {
+        dispatch(receiveFailure('There was an error retrieving results from the data source.'));
+      });;
   };
 }
 
