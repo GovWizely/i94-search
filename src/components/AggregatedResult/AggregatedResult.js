@@ -22,12 +22,14 @@ ResultCountLabel.propTypes = {
 };
 
 const TimeFrameLabel = ({ query }) => {
+  let time_frame = '';
   if (has(query, 'date')) {
-    var time_frame = query['date'].split(" TO ");
+    time_frame = query['date'].split(" TO ");
     time_frame = moment(time_frame[0]).format('MMM YYYY') + " to " + moment(time_frame[1]).format('MMM YYYY');
   }
-  else
-    var time_frame = "no time frame specified";
+  else {
+    time_frame = "no time frame specified";
+  }
   let text = '';
   if (!isEmpty(omit(query, ['offset', 'percent_change']))) {
     text = `I-94 Arrivals for:  ${time_frame}.`;
@@ -39,7 +41,7 @@ TimeFrameLabel.propTypes = {
 };
 
 function downloadReports(reports){
-  var blob = new Blob([JSON.stringify(reports, null, 4)], {type: "text/plain;charset=utf-8"});
+  const blob = new Blob([JSON.stringify(reports, null, 4)], {type: "text/plain;charset=utf-8"});
   FileSaver.saveAs(blob, "reports.json");
 }
 

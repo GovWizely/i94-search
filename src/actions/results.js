@@ -56,7 +56,10 @@ function fetchAggResults(querystring, params, offset = 0, aggregated_results = {
     dispatch(requestAggResults(querystring));
     return fetch(`${host}?api_key=${apiKey}&size=100&offset=${offset}&${querystring}`)
       .then(response => response.json())
-      .then(json => dispatch(aggregateResults(json, querystring, params, offset, aggregated_results)));
+      .then(json => dispatch(aggregateResults(json, querystring, params, offset, aggregated_results)))
+      .catch((error) => {
+        dispatch(receiveFailure('There was an error retrieving results from the data source.'));
+      });;
   };
 }
 
@@ -70,23 +73,13 @@ function shouldFetchResults(state) {
   return true;
 }
 
-export function fetchResultsIfNeeded(params) {
-  return (dispatch, getState) => {
-    if (shouldFetchResults(getState())) {
-      return dispatch(fetchResults(buildQueryString(params)));
-    }
-
-    return Promise.resolve([]);
-  };
-}
-
 export function fetchAggResultsIfNeeded(params) {
   return (dispatch, getState) => {
     params.percent_change = params.percent_change ? params.percent_change : ""
     if (isEmpty(omit(params, ['offset', 'size', 'percent_change', 'select_options'])))
       return dispatch(receiveAggResults({results: []})); // Don't return anything if no query is entered
     if(shouldFetchResults(getState())){
-      var agg_results = {results: [], total: 0}
+      const agg_results = {results: [], total: 0}
       return dispatch(fetchAggResults(buildQueryString(params), params, 0, agg_results));
     }
 
@@ -98,7 +91,7 @@ function buildQueryString(params) {
   params = filterSelectValues(params);
 
   if (params.start_date && params.percent_change) {
-    var date_range = calculateDateRange(moment(params.start_date), params.percent_change);
+    const date_range = calculateDateRange(moment(params.start_date), params.percent_change);
     Object.assign(params, { date: date_range });
   }
   return stringify(omit(params, ['start_date', 'percent_change', 'select_options']));
@@ -121,9 +114,9 @@ function filterSelectValues(params) {
 }
 
 function calculateDateRange(start_date, percent_change){
-  var start_month = start_date.format('M');
-  var start_year = start_date.format('YYYY');
-  var range_start_month, range_start_date, range_end_date;
+  const start_month = start_date.format('M');
+  const start_year = start_date.format('YYYY');
+  let range_start_month, range_start_date, range_end_date;
 
   if (percent_change == '1') {
     range_start_month = start_date.format('MM');

@@ -1,9 +1,9 @@
 import { values, capitalize, compact, has, map } from '../utils/lodash';
 
 export function buildAggResults(raw_results, agg_results) {
-  for (var i in raw_results) {
-    var entry = raw_results[i];
-    var key = entry.i94_country_or_region;
+  for (let i in raw_results) {
+    let entry = raw_results[i];
+    let key = entry.i94_country_or_region;
     if ( !has(agg_results, key) ) {
       // Build initial agg entry if it doesn't exist yet:
       agg_results[key] = buildNewEntry(entry)

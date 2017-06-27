@@ -3,10 +3,15 @@ import { connect } from 'react-redux';
 import { camelCase, isEmpty, map, omit, omitBy, reduce, snakeCase } from '../utils/lodash';
 import { stringify } from 'querystring';
 import { Form, Spinner, AggregatedResult } from '../components';
-import { fetchAggResultsIfNeeded, pageResults } from '../actions';
+import { fetchAggResultsIfNeeded, pageResults, requestFormOptions } from '../actions';
 import './App.scss';
 
 class App extends Component {
+  componentWillMount() {
+    const { dispatch } = this.props;
+    dispatch(requestFormOptions());
+  }
+
   componentDidMount() {
     const { dispatch, query } = this.props;
     dispatch(fetchAggResultsIfNeeded(query));
@@ -36,8 +41,7 @@ class App extends Component {
   }
 
   render() {
-
-    const { query, results } = this.props;
+    const { query, results, form_options } = this.props;
     const formValues = reduce(
       query,
       (result, value, key) => Object.assign(result, { [camelCase(key)]: value }),
@@ -50,7 +54,7 @@ class App extends Component {
 
         <div className="explorer__content">
 
-          <Form onSubmit={this.handleSubmit} initialValues={formValues} />
+          <Form onSubmit={this.handleSubmit} initialValues={formValues} formOptions={form_options}/>
           <Spinner active={results.isFetchingAggs} />
           <AggregatedResult results={results} onPaging={this.handleAggPaging} query={query} />
         </div>
@@ -63,14 +67,16 @@ App.propTypes = {
   history: PropTypes.object.isRequired,
   query: PropTypes.object.isRequired,
   results: PropTypes.object,
+  form_options: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
   const query = ownProps.history.getCurrentLocation().query;
-  const { results } = state;
+  const { results, form_options } = state;
   return {
     query,
     results,
+    form_options
   };
 }
 
