@@ -4,7 +4,15 @@ const config = Object.assign({
   development: {
     api: {
       i94: {
-        host: 'http://127.0.0.1:3000/v1/i94_monthly_dat/search',
+        host: 'http://127.0.0.1:3000/v1/i94_monthly_data/search',
+        apiKey: 'devkey',
+      },
+    },
+  },
+  test: {
+    api: {
+      i94: {
+        host: 'http://127.0.0.1:3000/v1/i94_monthly_data/search',
         apiKey: 'devkey',
       },
     },

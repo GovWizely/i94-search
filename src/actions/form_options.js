@@ -1,9 +1,10 @@
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'querystring';
 import { isEmpty, omit, values, has, map } from '../utils/lodash';
-import { SET_FORM_OPTIONS } from 'constants';
+import { SET_FORM_OPTIONS } from '../constants';
 import config from '../config.js';
 import { propComparator } from './sort_reports';
+import { receiveFailure } from './results.js';
 
 const { host, apiKey } = config.api.i94;
 
@@ -32,7 +33,7 @@ export function requestFormOptions(){
         .then(response => response.json())
         .then(json => dispatch(setFormOptions(json)))
         .catch((error) => {
-          dispatch(receiveFailure('There was an error connecting to the data source.'));
+          dispatch(receiveFailure('There was an error connecting to the data source: ' + error));
         });;
   };
 }

@@ -3,7 +3,7 @@ import { stringify } from 'querystring';
 import { isEmpty, omit, values, has } from '../utils/lodash';
 import { buildAggResults } from './build_agg_results.js';
 import { buildReports } from './build_reports.js';
-import { REQUEST_AGG_RESULTS, RECEIVE_FAILURE, PAGE_RESULTS, RECEIVE_AGG_RESULTS } from 'constants';
+import { REQUEST_AGG_RESULTS, RECEIVE_FAILURE, PAGE_RESULTS, RECEIVE_AGG_RESULTS } from '../constants';
 import config from '../config.js';
 import moment from 'moment';
 
@@ -35,6 +35,7 @@ export function receiveAggResults(payload) {
 }
 
 function aggregateResults(json, querystring, params, offset, agg_results) {
+  console.log(json)
   // 10k is the max offset that can be reached in Elasticsearch for now:
   //if(json.total >= 10000) return receiveAggResults({results: []});
   if(json.total >= 10000) return receiveFailure('Too many results; enter fewer countries, world regions, or groups to limit the number of reports.');
