@@ -27,7 +27,7 @@ export function calculatePercentageChange(values_hash, percent_change) {
           ((end - start)/start * 100).toFixed(2).toString() + "%"];
 }
 
-export function filterValuesForInterval(values_hash, percent_change){
+export function filterValuesForInterval(values_hash, percent_change) {
   const values_array = values(values_hash);
   const keys_array = Object.keys(values_hash);
 

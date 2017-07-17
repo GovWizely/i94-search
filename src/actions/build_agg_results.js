@@ -16,10 +16,10 @@ export function buildAggResults(raw_results, agg_results) {
       agg_results[key].pleasure_visa_arrivals[entry.date] = entry.pleasure_visa_arrivals;
     if ( entry.student_visa_arrivals != null )
       agg_results[key].student_visa_arrivals[entry.date] = entry.student_visa_arrivals;
-    if ( entry.ports_arrivals.length > 0 )
+    if ( entry.ports_arrivals != null && entry.ports_arrivals.length > 0 )
       agg_results[key].ports_arrivals[entry.date] = entry.ports_arrivals;
   }
-  
+
   return agg_results;
 }
 

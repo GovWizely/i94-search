@@ -35,17 +35,16 @@ export function receiveAggResults(payload) {
 }
 
 function aggregateResults(json, querystring, params, offset, agg_results) {
-  console.log(json)
   // 10k is the max offset that can be reached in Elasticsearch for now:
   //if(json.total >= 10000) return receiveAggResults({results: []});
   if(json.total >= 10000) return receiveFailure('Too many results; enter fewer countries, world regions, or groups to limit the number of reports.');
-  
+
   agg_results.results = buildAggResults(json.results, agg_results.results);
   agg_results.total += json.results.length;
   // Fetch next batch of results if needed:
   if(agg_results.total < json.total)
     return fetchAggResults(querystring, params, offset+100, agg_results);
-  
+
   agg_results.results = buildReports(agg_results.results, params);
 
   return receiveAggResults(agg_results);
@@ -59,7 +58,7 @@ function fetchAggResults(querystring, params, offset = 0, aggregated_results = {
       .then(response => response.json())
       .then(json => dispatch(aggregateResults(json, querystring, params, offset, aggregated_results)))
       .catch((error) => {
-        dispatch(receiveFailure('There was an error retrieving results from the data source.'));
+        dispatch(receiveFailure('There was an error retrieving results from the data source: ' + error));
       });;
   };
 }
@@ -80,7 +79,7 @@ export function fetchAggResultsIfNeeded(params) {
     if (isEmpty(omit(params, ['offset', 'size', 'percent_change', 'select_options'])))
       return dispatch(receiveAggResults({results: []})); // Don't return anything if no query is entered
     if(shouldFetchResults(getState())){
-      const agg_results = {results: [], total: 0}
+      const agg_results = {results: {}, total: 0}
       return dispatch(fetchAggResults(buildQueryString(params), params, 0, agg_results));
     }
 

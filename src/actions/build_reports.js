@@ -12,11 +12,11 @@ export function buildReports(agg_results, params){
     const arrivals_keys = map(visible_fields.split(','), type => { return type + "_arrivals"; });
 
     populateAdditionalFields(arrivals_keys, entry, percent_change);
-    
+
     if( has(entry, 'ports_arrivals')) // Add ports fields
       agg_results[key] = Object.assign(entry, buildPortsValues(entry.ports_arrivals, percent_change));
   }
-  agg_results = performSort('i94_country_or_region:asc', values(agg_results));
+  agg_results = performSort('i94_country_or_region:asc', values(agg_results)); // Sort and flatten reports into array
 
   return agg_results;
 }
@@ -32,6 +32,7 @@ function populateAdditionalFields(arrivals_keys, entry, percent_change){
       Object.keys(entry[arrivals_type]).sort().forEach(function(k) {
         ordered[k] = entry[arrivals_type][k];
       });
+
       entry[arrivals_type] = filterValuesForInterval(ordered, percent_change);
       entry[arrivals_type + "_percent_change"] = calculatePercentageChange(entry[arrivals_type], percent_change);
     }

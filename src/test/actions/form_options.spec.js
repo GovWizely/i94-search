@@ -43,7 +43,6 @@ describe('async actions', () => {
     }]
 
     return store.dispatch(actions.requestFormOptions()).then(() => {
-      console.log(JSON.stringify(store.getActions(), null, 2))
       expect(store.getActions()).toEqual(expected_actions);
     });
   });
