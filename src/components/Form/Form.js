@@ -30,7 +30,7 @@ const SelectField = ({ input, name, description, label = 'Untitled', options, me
         onChange={value => {
           input.onChange(value)
           if (handleChange){
-            handleChange(value);
+            handleChange(value, name);
           }
         }}
       />
@@ -124,8 +124,8 @@ class Form extends Component {
     this.setState({selectedField: value});
   }
 
-  handleDropdownChange(value){
-    console.log('wooooot!!')
+  handleDropdownChange(value, field){
+    return this.props.dispatch(requestDateOptions(value, field));
   }
 
   componentDidMount(){

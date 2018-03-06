@@ -54,7 +54,7 @@ class App extends Component {
 
         <div className="explorer__content">
 
-          <Form onSubmit={this.handleSubmit} initialValues={formValues} formOptions={form_options}/>
+          <Form onSubmit={this.handleSubmit} initialValues={formValues} formOptions={form_options} dispatch={this.props.dispatch} />
           <Spinner active={results.isFetchingAggs} />
           <AggregatedResult results={results} onPaging={this.handleAggPaging} query={query} />
         </div>

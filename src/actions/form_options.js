@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'querystring';
-import { isEmpty, omit, values, has, map, compact } from '../utils/lodash';
+import { isEmpty, omit, values, has, map, compact, snakeCase } from '../utils/lodash';
 import { SET_FORM_OPTIONS, SET_DATE_RANGE } from '../constants';
 import config from '../config.js';
 import { propComparator } from './sort_reports';
@@ -9,18 +9,9 @@ import { receiveFailure } from './results.js';
 const { host, apiKey } = config.api.i94;
 
 export function setFormOptions(options){
-  let countries = compact(map(options.aggregations.countries, obj => { 
-    if(obj['key'] != "")
-      return optionObject(obj['key']);
-  })).sort(propComparator('value', 'asc'));
-  let world_regions = compact(map(options.aggregations.world_regions, obj => { 
-    if(obj['key'] != "")
-      return optionObject(obj['key']); 
-  })).sort(propComparator('value', 'asc'));
-  let ntto_groups = compact(map(options.aggregations.ntto_groups, obj => { 
-    if(obj['key'] != "")
-      return optionObject(obj['key']); 
-  })).sort(propComparator('value', 'asc'));
+  let countries = buildFormOptions(options.aggregations.countries);
+  let world_regions = buildFormOptions(options.aggregations.world_regions);
+  let ntto_groups = buildFormOptions(options.aggregations.ntto_groups);
 
   let date_vals = findStartAndEndDate(options.aggregations.dates);
 
@@ -53,7 +44,9 @@ export function requestFormOptions(){
   };
 }
 
-export function requestDateOptions(querystring){
+export function requestDateOptions(value, field){
+  const querystring = snakeCase(field) + "=" + value;
+
   return (dispatch) => {
     return fetch(`${host}?api_key=${apiKey}&size=1&${querystring}`)
         .then(response => response.json())
@@ -64,8 +57,11 @@ export function requestDateOptions(querystring){
   };
 }
 
-function optionObject(val){
-  return {label: val, value: val}
+function buildFormOptions(aggregations){
+  return compact(map(aggregations, obj => { 
+    if(obj.key != "")
+      return {label: obj.key, value: obj.key}
+  })).sort(propComparator('value', 'asc'));
 }
 
 function findStartAndEndDate(dates){
