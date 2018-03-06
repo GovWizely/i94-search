@@ -8,6 +8,10 @@ import FormMessages from 'redux-form-validation';
 import { generateValidation } from 'redux-form-validation';
 import './Form.scss';
 import percentChangeList from '../../fixtures/percent_change';
+import { isEmpty } from '../../utils/lodash';
+import { requestDateOptions } from '../../actions/form_options';
+
+const $ = window.$;
 
  const validations = {
      startDate: {
@@ -55,9 +59,9 @@ SelectField.propTypes = {
   multi: PropTypes.bool,
 };
 
-const DateField = ({ field }) => {
+const DateField = ({ field, setRef }) => {
   return (
-    <input type="month" className="explorer__form__input" id={field.name} {...field} />
+    <input type="month" ref={setRef} className="explorer__form__input" id={field.name} {...field} />
   );
 };
 DateField.propTypes = {
@@ -100,6 +104,20 @@ class Form extends Component {
 
   handleChange(value) {
     this.setState({selectField: value});
+  }
+
+  componentDidMount(){
+    const date_range = this.props.formOptions.dateRange;
+    const min_month = isEmpty(date_range) ? '2000-01' : date_range[0];
+    const max_month = isEmpty(date_range) ? '2016-03' : date_range[1];
+    $('input[type=month]').MonthPicker({ StartYear: 2016, ShowIcon: false, MinMonth: min_month, MaxMonth: max_month })
+  }
+
+  componentDidUpdate(){
+    const date_range = this.props.formOptions.dateRange;
+    const min_month = isEmpty(date_range) ? '2000-01' : date_range[0];
+    const max_month = isEmpty(date_range) ? '2016-03' : date_range[1];
+    $('input[type=month]').MonthPicker({ StartYear: 2016, ShowIcon: false, MinMonth: min_month, MaxMonth: max_month })
   }
 
   render() {
@@ -163,7 +181,7 @@ class Form extends Component {
             <div className="explorer__form__row_group">
               <div className="explorer__form__group">
                 <label>Choose Starting Month</label>
-                <DateField field={startDate} />
+                <DateField field={startDate} setRef={this.setRef} />
               </div>
             </div>
           </div>

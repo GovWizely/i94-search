@@ -72,6 +72,7 @@
     "react-chartjs2": "^1.1.0",
     "react-datepicker": "^0.28.2",
     "react-dom": "^15.2.1",
+    "react-radio-group": "^3.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.5.1",
     "react-router-redux": "^4.0.5",
