@@ -78,8 +78,7 @@
     "react-router-redux": "^4.0.5",
     "react-select": "^1.0.0-beta14",
     "redux": "^3.5.2",
-    "redux-form": "^5.2.5",
-    "redux-form-validation": "0.0.8",
+    "redux-form": "^7.3.0",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "spinkit": "^1.2.5"

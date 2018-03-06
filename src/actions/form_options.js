@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'querystring';
-import { isEmpty, omit, values, has, map } from '../utils/lodash';
+import { isEmpty, omit, values, has, map, compact } from '../utils/lodash';
 import { SET_FORM_OPTIONS, SET_DATE_RANGE } from '../constants';
 import config from '../config.js';
 import { propComparator } from './sort_reports';
@@ -9,15 +9,18 @@ import { receiveFailure } from './results.js';
 const { host, apiKey } = config.api.i94;
 
 export function setFormOptions(options){
-  let countries = map(options.aggregations.countries, obj => { 
-    return optionObject(obj['key']);
-  }).sort(propComparator('value', 'asc'));
-  let world_regions = map(options.aggregations.world_regions, obj => { 
-    return optionObject(obj['key']); 
-  }).sort(propComparator('value', 'asc'));
-  let ntto_groups = map(options.aggregations.ntto_groups, obj => { 
-    return optionObject(obj['key']); 
-  }).sort(propComparator('value', 'asc'));
+  let countries = compact(map(options.aggregations.countries, obj => { 
+    if(obj['key'] != "")
+      return optionObject(obj['key']);
+  })).sort(propComparator('value', 'asc'));
+  let world_regions = compact(map(options.aggregations.world_regions, obj => { 
+    if(obj['key'] != "")
+      return optionObject(obj['key']); 
+  })).sort(propComparator('value', 'asc'));
+  let ntto_groups = compact(map(options.aggregations.ntto_groups, obj => { 
+    if(obj['key'] != "")
+      return optionObject(obj['key']); 
+  })).sort(propComparator('value', 'asc'));
 
   let date_vals = findStartAndEndDate(options.aggregations.dates);
 
