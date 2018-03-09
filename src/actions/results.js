@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { stringify } from 'querystring';
-import { isEmpty, omit, values, has } from '../utils/lodash';
+import { compact, has, isEmpty, omit, values } from '../utils/lodash';
 import { buildAggResults } from './build_agg_results.js';
 import { buildReports } from './build_reports.js';
 import { REQUEST_AGG_RESULTS, RECEIVE_FAILURE, PAGE_RESULTS, RECEIVE_AGG_RESULTS } from '../constants';
@@ -75,9 +75,6 @@ function shouldFetchResults(state) {
 
 export function fetchAggResultsIfNeeded(params) {
   return (dispatch, getState) => {
-    params.percent_change = params.percent_change ? params.percent_change : ""
-    if (isEmpty(omit(params, ['offset', 'size', 'percent_change', 'select_options'])))
-      return dispatch(receiveAggResults({results: []})); // Don't return anything if no query is entered
     if(shouldFetchResults(getState())){
       const agg_results = {results: {}, total: 0}
       return dispatch(fetchAggResults(buildQueryString(params), params, 0, agg_results));

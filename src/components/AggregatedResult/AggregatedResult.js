@@ -1,4 +1,4 @@
-import { isEmpty, map, omit, has } from '../../utils/lodash';
+import { compact, has, isEmpty, map, omit, values } from '../../utils/lodash';
 import React, { PropTypes } from 'react';
 import Item from './Item';
 import Pages from './Pages';
@@ -61,7 +61,7 @@ DownloadButton.propTypes = {
 };
 
 const AggregatedResult = ({ onPaging, query = {}, results }) => {
-  if (results.isFetchingAggs) return null;
+  if (results.isFetchingAggs || isEmpty(compact(values(query)))) return null;
   if (results.error != "") 
     return (<div className="explorer__result">{results.error}</div>);
 

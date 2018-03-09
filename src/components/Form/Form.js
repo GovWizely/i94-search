@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { RadioGroup, Radio } from 'react-radio-group';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, untouch } from 'redux-form';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import { values } from '../../utils/lodash';
 
 import './Form.scss';
 import percentChangeList from '../../fixtures/percent_change';
@@ -25,6 +26,7 @@ const SelectField = ({ input, name, description, label = 'Untitled', options, me
         options={options}
         value={input.value}
         multi={multi}
+        autoBlur={true}
         onBlur={(option) => input.onBlur(option.value)}
         simpleValue = {true}
         onChange={value => {
@@ -36,7 +38,7 @@ const SelectField = ({ input, name, description, label = 'Untitled', options, me
       />
     </div>
      <div className="validation-error">
-      {meta.error &&
+      {meta.error && meta.touched &&
           <span>
             {meta.error}
           </span>}
@@ -50,9 +52,17 @@ SelectField.propTypes = {
   multi: PropTypes.bool,
 };
 
-const DateField = ({ input }) => {
+const DateField = ({ input, meta }) => {
   return (
-    <input {...input} type="month" className="explorer__form__input"  />
+    <div>
+      <input {...input} type="month" className="explorer__form__input"  />
+      <div className="validation-error">
+        {meta.error && meta.touched &&
+            <span>
+              {meta.error}
+            </span>}
+      </div>
+    </div>
   );
 };
 
@@ -115,12 +125,18 @@ class Form extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {selectedField: 'countries'};
+    const selectedField = localStorage.getItem('selectedField') ? localStorage.getItem('selectedField') : 'countries';
+    this.state = {selectedField: selectedField};
     this.handleRadioChange = this.handleRadioChange.bind(this);
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.setMonthPicker = this.setMonthPicker.bind(this);
   }
 
   handleRadioChange(value) {
+    const { dispatch } = this.props;
+    dispatch(change('form', this.state.selectedField, null));
+    dispatch(untouch('form', this.state.selectedField));
+    localStorage.setItem('selectedField', value);
     this.setState({selectedField: value});
   }
 
@@ -128,25 +144,26 @@ class Form extends Component {
     return this.props.dispatch(requestDateOptions(value, field));
   }
 
-  componentDidMount(){
+  setMonthPicker(){
     const date_range = this.props.formOptions.dateRange;
     const min_month = isEmpty(date_range) ? '2000-01' : date_range[0];
     const max_month = isEmpty(date_range) ? '2016-03' : date_range[1];
     $('input[type=month]').MonthPicker({ StartYear: 2016, ShowIcon: false, MinMonth: min_month, MaxMonth: max_month })
   }
 
+  componentDidMount(){
+    this.setMonthPicker();
+  }
+
   componentDidUpdate(){
-    const date_range = this.props.formOptions.dateRange;
-    const min_month = isEmpty(date_range) ? '2000-01' : date_range[0];
-    const max_month = isEmpty(date_range) ? '2016-03' : date_range[1];
-    $('input[type=month]').MonthPicker({ StartYear: 2016, ShowIcon: false, MinMonth: min_month, MaxMonth: max_month })
+    this.setMonthPicker();
   }
 
   render() {
     const { handleSubmit, formOptions } = this.props;
     const { selectedField } = this.state;
     let selectField;
-    if (selectedField === 'countries'){
+    if (selectedField === 'countries' || selectedField === null){
       selectField = <CountriesField options={formOptions.countries} handleDropdownChange={this.handleDropdownChange} />;
     }
     else if (selectedField == 'worldRegions'){
@@ -161,11 +178,13 @@ class Form extends Component {
         <fieldset>
           <div className="explorer__form__group">
             <label>Select an option to search by Countries, World Regions, or NTTO Groups</label>
+            <Field name="selectOptions" component={ props => 
             <RadioGroup name='selectOptions' selectedValue={selectedField ? selectedField : 'countries'} onChange={this.handleRadioChange}>
               <Radio value="countries" /> Countries
               <Radio value="worldRegions" /> World Regions
               <Radio value="nttoGroups" /> NTTO Groups
             </RadioGroup>
+            } />
           </div>
 
           {selectField}
@@ -175,7 +194,7 @@ class Form extends Component {
               <div className="explorer__form__group">
                 <label>Choose Starting Month</label>
                 <Field name="startDate" validate={required} component={ props =>
-                    <DateField input={props.input} />
+                    <DateField input={props.input} meta={props.meta} />
                   }
                 />
               </div>
@@ -196,7 +215,6 @@ class Form extends Component {
                     />
                   }
                 />
-                
               </div>
 
 

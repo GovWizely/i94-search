@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { camelCase, isEmpty, map, omit, omitBy, reduce, snakeCase } from '../utils/lodash';
+import { camelCase, compact, isEmpty, map, omit, omitBy, reduce, snakeCase, values } from '../utils/lodash';
 import { stringify } from 'querystring';
 import { Form, Spinner, AggregatedResult } from '../components';
 import { fetchAggResultsIfNeeded, pageResults, requestFormOptions } from '../actions';
@@ -14,7 +14,8 @@ class App extends Component {
 
   componentDidMount() {
     const { dispatch, query } = this.props;
-    dispatch(fetchAggResultsIfNeeded(query));
+    if(!isEmpty(compact(values(query))))
+      dispatch(fetchAggResultsIfNeeded(query));
   }
 
   handleAggPaging = (e) => {
@@ -71,8 +72,11 @@ App.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const query = ownProps.history.getCurrentLocation().query;
+  let query = ownProps.history.getCurrentLocation().query;
   const { results, form_options } = state;
+  if (isEmpty(ownProps.history.getCurrentLocation().query)){
+    query = {countries: null, start_date: null, percent_change: null };
+  }
   return {
     query,
     results,
